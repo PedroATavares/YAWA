@@ -38,6 +38,7 @@ captures/
 .idea/workspace.xml
 
 # Android Studio project artifacts
+.idea
 **.idea/
 **/*.iml
 
