@@ -1,6 +1,5 @@
 package isel.pdm.demos.mymoviedb.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * Class whose instances represent movie information obtained from the remote API.
