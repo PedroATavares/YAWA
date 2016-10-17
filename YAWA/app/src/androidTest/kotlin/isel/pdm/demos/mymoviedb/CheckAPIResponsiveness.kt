@@ -1,15 +1,16 @@
 package isel.pdm.demos.mymoviedb
 
+import android.content.Context
+import android.content.res.Resources
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.core.deps.guava.base.Strings
 import android.support.test.runner.AndroidJUnit4
 
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import isel.pdm.demos.mymoviedb.models.MovieDto
+import isel.pdm.weatherForecast.GetForecastRequest
 
 import org.junit.Before
 import org.junit.Test
@@ -31,7 +32,6 @@ import kotlin.test.fail
 class CheckAPIResponsiveness {
 
     private lateinit var requestQueue: RequestQueue
-
     // Synchronization between test harness thread and callbacks thread
     private lateinit var latch: CountDownLatch
     private var error: AssertionError? = null
@@ -72,11 +72,10 @@ class CheckAPIResponsiveness {
 
     @Test
     fun test_checkAPIResponsiveness() {
-
         requestQueue.add(
             StringRequest(
                 Request.Method.GET,
-                MOVIE_URL,
+                LONDON_WEATHER_URL,
                 { response -> executeAndPublishResult { assertFalse(Strings.isNullOrEmpty(response)) } },
                 { error -> executeAndPublishResult { assertNotNull(error.networkResponse) } }
             )
@@ -88,12 +87,13 @@ class CheckAPIResponsiveness {
     @Test
     fun test_successfulResponseParsing() {
         requestQueue.add(
-                GetRequest(
-                    MOVIE_URL,
-                    { movie -> executeAndPublishResult { assertNotNull(movie) } },
+                GetForecastRequest(
+                    LONDON_WEATHER_URL,
+                    { wt -> executeAndPublishResult { assertNotNull(wt) } },
                     { error -> executeAndPublishResult { fail() } }
                 )
         )
+
         waitForCompletion()
     }
 }
