@@ -1,4 +1,4 @@
-package isel.pdm.weatherForecast
+package isel.pdm.yawa
 
 import android.content.Context
 import com.android.volley.NetworkResponse

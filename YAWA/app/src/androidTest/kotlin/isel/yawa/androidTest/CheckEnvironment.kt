@@ -1,4 +1,4 @@
-package isel.pdm.demos.mymoviedb
+package isel.yawa.androidTest
 
 import android.content.Context
 import android.content.pm.PackageManager

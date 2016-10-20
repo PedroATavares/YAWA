@@ -1,4 +1,4 @@
-package isel.pdm.weatherForecast
+package isel.pdm.yawa
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

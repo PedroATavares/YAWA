@@ -9,17 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="isel.pdm.weatherForecast.MainActivity">
-
-    <Button
-        android:text="@string/credits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="119dp"
-        android:layout_marginTop="49dp"
-        android:id="@+id/creditsButton" />
+    tools:context="isel.pdm.yawa.MainActivity">
 
     <EditText
         android:layout_width="wrap_content"
@@ -27,10 +17,27 @@
         android:inputType="text|textPersonName"
         android:ems="10"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/creditsButton"
-        android:layout_marginEnd="42dp"
         android:id="@+id/editText"
         android:hint="Enter the city name"
-        android:singleLine="false" />
+        android:singleLine="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="@string/credits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/creditsButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <RadioButton
+        android:text="5 day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:id="@+id/radioButton_day5" />
 
 </RelativeLayout>

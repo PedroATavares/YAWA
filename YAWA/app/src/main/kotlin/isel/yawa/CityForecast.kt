@@ -1,4 +1,4 @@
-package isel.pdm.weatherForecast
+package isel.pdm.yawa
 
 import java.util.*
 

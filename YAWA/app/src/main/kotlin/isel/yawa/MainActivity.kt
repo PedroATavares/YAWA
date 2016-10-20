@@ -1,4 +1,4 @@
-package isel.pdm.weatherForecast
+package isel.pdm.yawa
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -16,9 +16,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
         creditsButton.setOnClickListener{
-            val myIntent = Intent(this@MainActivity, CreditsActivity::class.java)
-            this@MainActivity.startActivity(myIntent)
+            this.startActivity(Intent(this, CreditsActivity::class.java));
         }
 
         editText.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->

@@ -1,4 +1,4 @@
-package isel.pdm.demos.mymoviedb
+package isel.yawa.androidTest
 
 import android.content.Context
 import android.content.res.Resources
@@ -10,7 +10,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import isel.pdm.weatherForecast.GetForecastRequest
+import isel.pdm.yawa.GetForecastRequest
 
 import org.junit.Before
 import org.junit.Test
