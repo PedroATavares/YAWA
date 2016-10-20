@@ -1,4 +1,4 @@
-package isel.pdm.yawa
+package isel.yawa
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -7,10 +7,7 @@ import android.os.Bundle
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
-import isel.pdm.demos.mymoviedb.R
 import kotlinx.android.synthetic.main.activity_weather.*
-
-import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
     var image_url = "http://openweathermap.org/img/w/"

@@ -1,11 +1,10 @@
-package isel.pdm.yawa
+package isel.yawa
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import isel.pdm.demos.mymoviedb.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 

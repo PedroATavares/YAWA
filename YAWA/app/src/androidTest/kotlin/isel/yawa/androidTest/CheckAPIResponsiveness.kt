@@ -1,7 +1,5 @@
 package isel.yawa.androidTest
 
-import android.content.Context
-import android.content.res.Resources
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.core.deps.guava.base.Strings
 import android.support.test.runner.AndroidJUnit4
@@ -10,7 +8,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import isel.pdm.yawa.GetForecastRequest
+import isel.yawa.GetForecastRequest
 
 import org.junit.Before
 import org.junit.Test
