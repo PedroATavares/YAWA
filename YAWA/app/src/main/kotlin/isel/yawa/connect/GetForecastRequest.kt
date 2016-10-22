@@ -1,4 +1,4 @@
-package isel.yawa
+package isel.yawa.connect
 
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
@@ -11,7 +11,7 @@ import isel.yawa.model.CityForecast
 
 import java.io.IOException
 
-class GetForecastRequest(url: String, success: (CityForecast) -> Unit, error: (VolleyError) -> Unit) : JsonRequest<CityForecast>(Request.Method.GET, url, "", success, error) {
+class GetForecastRequest(url: String, success: (CityForecast) -> Unit, error: (VolleyError) -> Unit) : JsonRequest<CityForecast>(Method.GET, url, "", success, error) {
 
     override fun parseNetworkResponse(response: NetworkResponse): Response<CityForecast> {
 

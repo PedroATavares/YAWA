@@ -7,21 +7,33 @@ import android.os.Bundle
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
+import isel.yawa.connect.GetForecastRequest
+import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_weather.*
 
 class WeatherActivity : AppCompatActivity() {
     var image_url = "http://openweathermap.org/img/w/"
     var extension = ".png"
 
+    private lateinit var requestManager: RequestManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestManager = RequestManager(applicationContext)
+
         setContentView(R.layout.activity_weather)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         val url = intent.extras.getString("url")
         getCityWeather(url)
     }
 
     private fun getCityWeather(url: String){
-        Volley.newRequestQueue(this@WeatherActivity).add(
+        requestManager.put(
                 GetForecastRequest(
                         url,
                         { city ->
@@ -42,6 +54,7 @@ class WeatherActivity : AppCompatActivity() {
             iconView.setBackgroundColor(Color.parseColor("#ff0000"))
             error.printStackTrace()
         })
-        Volley.newRequestQueue(this).add(imgRequest)
+
+        requestManager.put(imgRequest)
     }
 }

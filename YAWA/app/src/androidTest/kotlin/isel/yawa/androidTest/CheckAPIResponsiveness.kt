@@ -8,7 +8,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import isel.yawa.GetForecastRequest
+import isel.yawa.connect.GetForecastRequest
 
 import org.junit.Before
 import org.junit.Test
