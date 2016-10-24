@@ -1,12 +1,16 @@
-package isel.yawa.model;
+package isel.yawa.model
 
 import java.util.*
 
 
-data class CityForecast(val name:String, val weather: Collection<Weather>){
-    constructor() : this("", Collections.emptyList())
+data class CityForecast(val city:City, val list: Collection<List>){
+    constructor() : this(City(), Collections.emptyList())
 
-    data class Weather(val main: String, val description: String, val icon : String){
-        constructor() : this("", "","")
+    data class List( val weather: Collection<CityWheather.Weather> ){
+        constructor() : this(Collections.emptyList())
+    }
+
+    data class City (val name:String){
+        constructor(): this("")
     }
 }

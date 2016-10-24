@@ -31,13 +31,41 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <RadioButton
-        android:text="5 day"
+    <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp"
-        android:id="@+id/radioButton_day5" />
+        android:layout_alignStart="@+id/creditsButton"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:text="Today"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/today_button"
+            android:layout_below="@+id/editText"
+            android:layout_alignStart="@+id/radioButton_day5"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="5 day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="41dp"
+            android:id="@+id/radioButton_day5"
+            android:layout_weight="1" />
+    </RadioGroup>
+
+    <Button
+        android:text="Go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/go_button"
+        android:layout_marginBottom="22dp"
+        android:layout_above="@+id/creditsButton"
+        android:layout_alignStart="@+id/creditsButton" />
 
 </RelativeLayout>

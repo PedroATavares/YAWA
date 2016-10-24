@@ -21,28 +21,47 @@ class MainActivity : AppCompatActivity() {
         editText.setOnEditorActionListener({ tv, actionId, kev ->
             var enterPressed = actionId == EditorInfo.IME_ACTION_DONE
 
-            if (enterPressed)
-                getCurrentWeatherForCity(tv.text.toString())
+            if (enterPressed && radioButton_day5.isChecked)
+                getCurrentForecastForCity(tv.text.toString())
+            else
+                if (enterPressed && today_button.isChecked)
+                    getCurrentWeatherForCity(tv.text.toString())
 
             return@setOnEditorActionListener enterPressed // kotlin is weird, man
         })
+
+        go_button.setOnClickListener {
+            if (radioButton_day5.isChecked)
+                getCurrentForecastForCity(editText.text.toString())
+            else
+                if (today_button.isChecked)
+                    getCurrentWeatherForCity(editText.text.toString())
+        }
     }
 
     private fun getCurrentWeatherForCity(city : String) {
         val myIntent = Intent(this, WeatherActivity::class.java)
 
-        var qString : String = buildQueryString(city)
+        var qString : String = buildQueryString(city,resources.getString(R.string.api_weather_endpoint))
         myIntent.putExtra("url", qString)
 
         startActivity(myIntent)
     }
 
-    private fun  buildQueryString(city: String): String {
+    private fun getCurrentForecastForCity(city : String) {
+        val myIntent = Intent(this, ForecastActivity::class.java)
+
+        var qString : String = buildQueryString(city,resources.getString(R.string.api_forecast_endpoint));
+        myIntent.putExtra("url", qString)
+
+        startActivity(myIntent)
+    }
+
+    private fun  buildQueryString(city: String,endPoint: String): String {
         var api_base = resources.getString(R.string.api_base_uri)
-        var api_weather = resources.getString(R.string.api_weather_endpoint)
         var api_key = resources.getString(R.string.api_key)
 
-        return "${api_base}${api_weather}?${api_key}&q=${city}"
+        return "${api_base}${endPoint}?${api_key}&q=${city}"
     }
 
 }

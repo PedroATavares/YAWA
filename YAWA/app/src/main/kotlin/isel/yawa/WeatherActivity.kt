@@ -7,7 +7,7 @@ import android.os.Bundle
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
-import isel.yawa.connect.GetForecastRequest
+import isel.yawa.connect.GetWeatherRequest
 import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_weather.*
 
@@ -34,7 +34,7 @@ class WeatherActivity : AppCompatActivity() {
 
     private fun getCityWeather(url: String){
         requestManager.put(
-                GetForecastRequest(
+                GetWeatherRequest(
                         url,
                         { city ->
                             cityText.text=city.name

@@ -10,15 +10,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="isel.yawa.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="isel.yawa.CreditsActivity" />
-        <activity android:name="isel.yawa.WeatherActivity"></activity>
+        <activity android:name=".CreditsActivity" />
+        <activity android:name=".WeatherActivity" />
+        <activity android:name=".ForecastActivity" />
     </application>
 
 </manifest>
