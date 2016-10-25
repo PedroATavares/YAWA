@@ -11,135 +11,155 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="isel.yawa.ForecastActivity">
 
-    <GridLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
 
         <TextView
             android:text="Today "
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/today"
             android:layout_row="0"
             android:layout_column="0"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/todaydesc"
+            android:layout_row="1"
+            android:layout_column="0"
             android:layout_weight="1" />
+
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/todayicon"
             android:layout_weight="1"
             android:layout_row="2"
             android:layout_column="0" />
-        <TextView
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/todaydesc"
-            android:layout_row="1"
-            android:layout_column="0"/>
 
         <TextView
             android:text="Tomorrow "
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/intwodays"
             android:id="@+id/tomorrow"
             android:layout_row="0"
             android:layout_column="1"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tomorrowdesc"
+            android:layout_row="1"
+            android:layout_column="1"
             android:layout_weight="1" />
+
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tomorrowicon"
             android:layout_weight="1"
             android:layout_row="2"
             android:layout_column="1" />
-        <TextView
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tomorrowdesc"
-            android:layout_row="1"
-            android:layout_column="1"/>
-
 
         <TextView
             android:text="In 2 days "
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/inthreedays"
             android:layout_toEndOf="@+id/inthreedays"
             android:id="@+id/intwodays"
             android:layout_row="0"
             android:layout_column="2"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/twodaysdesc"
+            android:layout_row="1"
+            android:layout_column="2"
             android:layout_weight="1" />
+
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/twodaysicon"
             android:layout_weight="1"
             android:layout_row="2"
             android:layout_column="2" />
-        <TextView
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/twodaysdesc"
-            android:layout_row="1"
-            android:layout_column="2"/>
 
         <TextView
             android:text="In 3 days "
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/infourdays"
             android:id="@+id/inthreedays"
             android:layout_row="0"
             android:layout_column="3"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/threedaysdesc"
+            android:layout_row="1"
+            android:layout_column="3"
             android:layout_weight="1" />
+
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/threedaysicon"
             android:layout_weight="1"
             android:layout_row="2"
             android:layout_column="3" />
-        <TextView
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/threedaysdesc"
-            android:layout_row="1"
-            android:layout_column="3"/>
 
         <TextView
             android:text="In 4 days"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/today"
             android:id="@+id/infourdays"
             android:layout_row="0"
             android:layout_column="4"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/fourdaysdesc"
+            android:layout_row="1"
+            android:layout_column="4"
             android:layout_weight="1" />
+
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fourdaysicon"
             android:layout_weight="1"
             android:layout_row="2"
             android:layout_column="4" />
-        <TextView
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fourdaysdesc"
-            android:layout_row="1"
-            android:layout_column="4"/>
 
-    </GridLayout>
+    </LinearLayout>
 
 </LinearLayout>

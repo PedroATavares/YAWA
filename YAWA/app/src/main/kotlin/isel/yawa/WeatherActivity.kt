@@ -50,7 +50,9 @@ class WeatherActivity : AppCompatActivity() {
     private fun  getImageview(icon: String?) {
         val url = image_url+icon+extension
         val imgRequest = ImageRequest(url,
-                Response.Listener<android.graphics.Bitmap> { response -> iconView.setImageBitmap(response) }, 0, 0, iconView.scaleType, Bitmap.Config.ARGB_8888, Response.ErrorListener { error ->
+                Response.Listener<android.graphics.Bitmap> { response -> iconView.setImageBitmap(response) },
+                                                                0, 0, iconView.scaleType, Bitmap.Config.ARGB_8888,
+                Response.ErrorListener { error ->
             iconView.setBackgroundColor(Color.parseColor("#ff0000"))
             error.printStackTrace()
         })
