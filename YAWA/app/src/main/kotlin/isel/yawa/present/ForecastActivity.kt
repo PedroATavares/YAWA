@@ -25,8 +25,6 @@ class ForecastActivity : AppCompatActivity() {
     //var forecastDescs= arrayOf(todaydesc,tomorrowdesc,twodaysdesc,threedaysdesc,fourdaysdesc)
     //var forecastIcons= arrayOf(todayicon,tomorrowicon,twodaysicon,threedaysicon,fourdaysicon)
 
-    private lateinit var requestManager: RequestManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
@@ -43,9 +41,6 @@ class ForecastActivity : AppCompatActivity() {
         forecastIcons.set(3,threedaysicon)
         forecastIcons.set(4,fourdaysicon)
 */
-        requestManager = RequestManager(applicationContext)
-
-
     }
 
     override fun onStart() {
@@ -55,8 +50,7 @@ class ForecastActivity : AppCompatActivity() {
     }
 
     private fun getCityForecast(url: String){
-
-        requestManager.put(
+        RequestManager.put(
                 GetForecastRequest(
                         url,
                         { city ->
@@ -83,6 +77,6 @@ class ForecastActivity : AppCompatActivity() {
             error.printStackTrace()
         })
 
-        requestManager.put(imgRequest)
+        RequestManager.put(imgRequest)
     }
 }

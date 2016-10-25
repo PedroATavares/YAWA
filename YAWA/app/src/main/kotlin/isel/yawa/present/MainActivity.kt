@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import isel.yawa.R
+import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        RequestManager.setup(applicationContext) // ideally this would be in Application class
 
         creditsButton.setOnClickListener{
             startActivity(Intent(this, CreditsActivity::class.java));

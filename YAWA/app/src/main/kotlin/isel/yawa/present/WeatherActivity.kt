@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
@@ -16,12 +17,9 @@ class WeatherActivity : AppCompatActivity() {
     var image_url = "http://openweathermap.org/img/w/"
     var extension = ".png"
 
-    private lateinit var requestManager: RequestManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestManager = RequestManager(applicationContext)
 
         setContentView(R.layout.activity_weather)
     }
@@ -34,7 +32,7 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     private fun getCityWeather(url: String){
-        requestManager.put(
+        RequestManager.put(
                 GetWeatherRequest(
                         url,
                         { city ->
@@ -42,20 +40,29 @@ class WeatherActivity : AppCompatActivity() {
                             val weather = city.weather.elementAt(0)
                             weatherText.text="Weather: "+weather.main
                             weatherDescText.text="Description: "+weather.description
-                            getImageview(weather.icon)
+
+                            fetchAndShowIcon(weather.icon)
                         },
                         { error -> throw error }
                 )
         )
     }
-    private fun  getImageview(icon: String?) {
-        val url = image_url+icon+extension
-        val imgRequest = ImageRequest(url,
-                Response.Listener<Bitmap> { response -> iconView.setImageBitmap(response) }, 0, 0, iconView.scaleType, Bitmap.Config.ARGB_8888, Response.ErrorListener { error ->
-            iconView.setBackgroundColor(Color.parseColor("#ff0000"))
-            error.printStackTrace()
-        })
 
-        requestManager.put(imgRequest)
+    private fun fetchAndShowIcon(icon: String?) {
+        val url = image_url+icon+extension
+
+        val imgRequest = ImageRequest(url,
+                Response.Listener<Bitmap> { bitmap -> iconView.setImageBitmap(bitmap) },
+                0,
+                0,
+                iconView.scaleType,
+                Bitmap.Config.ARGB_8888,
+                Response.ErrorListener { error ->
+                    iconView.setBackgroundColor(Color.parseColor("#ff0000"))
+                    Toast.makeText(this, "Failed to fetch weather icon", Toast.LENGTH_SHORT).show()
+                }
+        )
+
+        RequestManager.put(imgRequest)
     }
 }
