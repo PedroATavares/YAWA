@@ -7,19 +7,15 @@ import android.os.Bundle
 import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
-import com.android.volley.toolbox.Volley
 import isel.yawa.R
 import isel.yawa.connect.GetWeatherRequest
 import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_weather.*
 
 class WeatherActivity : AppCompatActivity() {
-    var image_url = "http://openweathermap.org/img/w/"
-    var extension = ".png"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         setContentView(R.layout.activity_weather)
     }
@@ -28,30 +24,33 @@ class WeatherActivity : AppCompatActivity() {
         super.onStart()
 
         val url = intent.extras.getString("url")
-        getCityWeather(url)
+        getCurrentWeather(url)
     }
 
-    private fun getCityWeather(url: String){
+    private fun getCurrentWeather(url: String){
         RequestManager.put(
                 GetWeatherRequest(
                         url,
                         { city ->
-                            cityText.text=city.name
+                            cityText.text = city.name
+
                             val weather = city.weather.elementAt(0)
-                            weatherText.text="Weather: "+weather.main
-                            weatherDescText.text="Description: "+weather.description
+                            weatherText.text = weather.main
+                            weatherDescText.text = weather.description
 
                             fetchAndShowIcon(weather.icon)
                         },
-                        { error -> throw error }
+                        { error ->
+                            Toast.makeText(this, "Failure to retrieve weather information", Toast.LENGTH_SHORT).show()
+                            throw error
+                        }
                 )
         )
     }
 
     private fun fetchAndShowIcon(icon: String?) {
-        val url = image_url+icon+extension
-
-        val imgRequest = ImageRequest(url,
+        RequestManager.put(ImageRequest(
+                buildIconQueryUrl(icon),
                 Response.Listener<Bitmap> { bitmap -> iconView.setImageBitmap(bitmap) },
                 0,
                 0,
@@ -60,9 +59,11 @@ class WeatherActivity : AppCompatActivity() {
                 Response.ErrorListener { error ->
                     iconView.setBackgroundColor(Color.parseColor("#ff0000"))
                     Toast.makeText(this, "Failed to fetch weather icon", Toast.LENGTH_SHORT).show()
-                }
+                })
         )
+    }
 
-        RequestManager.put(imgRequest)
+    private fun  buildIconQueryUrl(icon: String?): String? {
+        return "${resources.getString(R.string.api_image_endpoint)}$icon.png"
     }
 }
