@@ -1,7 +1,8 @@
-package isel.yawa
+package isel.yawa.present
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import isel.yawa.R
 
 class CreditsActivity : AppCompatActivity() {
 

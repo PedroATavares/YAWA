@@ -1,4 +1,4 @@
-package isel.yawa
+package isel.yawa.present
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
+import isel.yawa.R
 import isel.yawa.connect.GetForecastRequest
 import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_forecast.*
@@ -23,8 +24,6 @@ class ForecastActivity : AppCompatActivity() {
     var forecastIcons :  Array<ImageView> = emptyArray()
     //var forecastDescs= arrayOf(todaydesc,tomorrowdesc,twodaysdesc,threedaysdesc,fourdaysdesc)
     //var forecastIcons= arrayOf(todayicon,tomorrowicon,twodaysicon,threedaysicon,fourdaysicon)
-
-    private lateinit var requestManager: RequestManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +41,6 @@ class ForecastActivity : AppCompatActivity() {
         forecastIcons.set(3,threedaysicon)
         forecastIcons.set(4,fourdaysicon)
 */
-        requestManager = RequestManager(applicationContext)
-
-
     }
 
     override fun onStart() {
@@ -54,8 +50,7 @@ class ForecastActivity : AppCompatActivity() {
     }
 
     private fun getCityForecast(url: String){
-
-        requestManager.put(
+        RequestManager.put(
                 GetForecastRequest(
                         url,
                         { city ->
@@ -82,6 +77,6 @@ class ForecastActivity : AppCompatActivity() {
             error.printStackTrace()
         })
 
-        requestManager.put(imgRequest)
+        RequestManager.put(imgRequest)
     }
 }

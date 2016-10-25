@@ -9,53 +9,64 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="isel.pdm.yawa.WeatherActivity">
+    tools:context="isel.yawa.present.WeatherActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/city_img_container"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/cityText"
+            android:layout_weight="1"
+            android:textColorHighlight="@android:color/holo_orange_dark"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="normal|italic"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/iconView"
+            android:layout_width="95dp"
+            android:layout_height="74dp" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/city_img_container"
         android:layout_alignParentStart="true"
-        android:weightSum="1">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/cityText"
-            android:fontFamily="sans-serif"
-            android:layout_weight="0.03"
-            android:textSize="30sp"
-            android:textStyle="normal|bold"
-            tools:textColor="@android:color/holo_red_dark"
-            android:textColorHighlight="@android:color/holo_orange_dark"
-            android:textAllCaps="false"
-            android:textColor="@android:color/holo_orange_dark" />
+        android:id="@+id/details">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/weatherText"
-            android:layout_weight="0.05"
-            android:textSize="30sp"
-            android:textStyle="normal|bold"
-            android:textColor="@android:color/holo_red_dark"
-            android:textColorHighlight="@android:color/holo_orange_dark" />
+            android:textSize="24sp"
+            android:textColor="@android:color/darker_gray"
+            android:textColorHighlight="@android:color/holo_orange_dark"
+            android:layout_marginTop="23dp" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:id="@+id/weatherDescText"
             android:layout_weight="0.03"
-            android:textSize="30sp"
-            android:textStyle="normal|bold"
-            android:textColor="@android:color/holo_red_dark"
-            android:textColorHighlight="@android:color/holo_orange_dark" />
+            android:textSize="20sp"
+            android:textColor="@android:color/darker_gray"
+            android:textColorHighlight="@android:color/holo_orange_dark"
+            tools:ignore="ObsoleteLayoutParam"
+            android:layout_below="@+id/weatherText"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="19dp" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/iconView"
-            android:layout_weight="0.03" />
     </LinearLayout>
+
 </RelativeLayout>
