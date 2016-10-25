@@ -1,4 +1,4 @@
-package isel.yawa
+package isel.yawa.present
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
+import isel.yawa.R
 import isel.yawa.connect.GetWeatherRequest
 import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -50,7 +51,7 @@ class WeatherActivity : AppCompatActivity() {
     private fun  getImageview(icon: String?) {
         val url = image_url+icon+extension
         val imgRequest = ImageRequest(url,
-                Response.Listener<android.graphics.Bitmap> { response -> iconView.setImageBitmap(response) }, 0, 0, iconView.scaleType, Bitmap.Config.ARGB_8888, Response.ErrorListener { error ->
+                Response.Listener<Bitmap> { response -> iconView.setImageBitmap(response) }, 0, 0, iconView.scaleType, Bitmap.Config.ARGB_8888, Response.ErrorListener { error ->
             iconView.setBackgroundColor(Color.parseColor("#ff0000"))
             error.printStackTrace()
         })

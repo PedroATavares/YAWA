@@ -1,4 +1,4 @@
-package isel.yawa
+package isel.yawa.present
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
+import isel.yawa.R
 import isel.yawa.connect.GetForecastRequest
 import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_forecast.*

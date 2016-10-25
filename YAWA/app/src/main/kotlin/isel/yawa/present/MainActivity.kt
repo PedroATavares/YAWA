@@ -1,9 +1,10 @@
-package isel.yawa
+package isel.yawa.present
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
+import isel.yawa.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 
