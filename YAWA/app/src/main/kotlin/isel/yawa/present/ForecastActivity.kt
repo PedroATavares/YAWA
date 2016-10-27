@@ -31,16 +31,7 @@ class ForecastActivity : AppCompatActivity() {
 
         forecastDescs= arrayOf(todaydesc,tomorrowdesc,twodaysdesc,threedaysdesc,fourdaysdesc)
         forecastIcons= arrayOf(todayicon,tomorrowicon,twodaysicon,threedaysicon,fourdaysicon)
-       /* forecastDescs.set(2,twodaysdesc)
-        forecastDescs.set(3,threedaysdesc)
-        forecastDescs.set(4,fourdaysdesc)
 
-        forecastIcons.set(0,todayicon)
-        forecastIcons.set(1,tomorrowicon)
-        forecastIcons.set(2,twodaysicon)
-        forecastIcons.set(3,threedaysicon)
-        forecastIcons.set(4,fourdaysicon)
-*/
     }
 
     override fun onStart() {
@@ -56,6 +47,7 @@ class ForecastActivity : AppCompatActivity() {
                         { city ->
                             var i=0
                             var k=0
+                            cityTextForecast.text = city.city.name
                             while(k<5){
                                 val weather = city.list.elementAt(i).weather.elementAt(0)
                                 forecastDescs.get(k).text="Description: "+weather.description
