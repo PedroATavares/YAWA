@@ -16,4 +16,7 @@
     <string name="get_forecast_fail_message" translatable="true">Failure to retrieve weather forecast</string>
     <string name="icon_fetch_failed_message" translatable="true">Failed to fetch weather icon</string>
 
+    <!-- Forecast Activity -->
+    <string name="forecast_description" translatable="true">Description: </string>
+
 </resources>

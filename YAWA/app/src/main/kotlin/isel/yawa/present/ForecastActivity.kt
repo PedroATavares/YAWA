@@ -2,6 +2,7 @@ package isel.yawa.present
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -13,32 +14,41 @@ import isel.yawa.R
 import isel.yawa.connect.GetForecastRequest
 import isel.yawa.connect.RequestManager
 import kotlinx.android.synthetic.main.activity_forecast.*
-import kotlinx.android.synthetic.main.activity_forecast.view.*
-import kotlinx.android.synthetic.main.activity_weather.*
 
 class ForecastActivity : AppCompatActivity() {
 
-    var image_url = "http://openweathermap.org/img/w/"
-    var extension = ".png"
-
-    var forecastDescs : Array<TextView> = emptyArray()
-    var forecastIcons :  Array<ImageView> = emptyArray()
-    //var forecastDescs= arrayOf(todaydesc,tomorrowdesc,twodaysdesc,threedaysdesc,fourdaysdesc)
-    //var forecastIcons= arrayOf(todayicon,tomorrowicon,twodaysicon,threedaysicon,fourdaysicon)
+    private lateinit  var forecastSlots : Array<Pair<TextView, ImageView>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
 
-        forecastDescs= arrayOf(todaydesc,tomorrowdesc,twodaysdesc,threedaysdesc,fourdaysdesc)
-        forecastIcons= arrayOf(todayicon,tomorrowicon,twodaysicon,threedaysicon,fourdaysicon)
+        forecastSlots = arrayOf(
+                Pair(todaydesc, todayicon),
+                Pair(tomorrowdesc, tomorrowicon),
+                Pair(twodaysdesc, twodaysicon),
+                Pair(threedaysdesc, threedaysicon),
+                Pair(fourdaysdesc, fourdaysicon)
+        )
 
+        if(savedInstanceState == null) {
+            val url = intent.extras.getString("url")
+            getCityForecast(url)
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val url = intent.extras.getString("url")
-        getCityForecast(url)
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        with(savedInstanceState){
+            cityTextForecast.text = getString("cityTextForecast")
+
+            forecastSlots.forEachIndexed { i, pair ->
+                pair.first.text = getString("textView$i")
+
+                pair.second.setImageBitmap(getParcelable("icon$i"))
+            }
+        }
     }
 
     private fun getCityForecast(url: String){
@@ -46,15 +56,14 @@ class ForecastActivity : AppCompatActivity() {
                 GetForecastRequest(
                         url,
                         { city ->
-                            var i=0
-                            var k=0
                             cityTextForecast.text = city.city.name
-                            while(k<5){
-                                val weather = city.list.elementAt(i).weather.elementAt(0)
-                                forecastDescs.get(k).text="Description: "+weather.description
-                                getImageview(weather.icon,forecastIcons[k])
-                                i+=8
-                                k++
+
+                            forecastSlots.forEachIndexed { i, pair ->
+                                val weather = city.list.elementAt(i * 8).weather.elementAt(0)
+
+                                pair.first.text = "${getString(R.string.forecast_description)} ${weather.description}"
+
+                                fetchAndShowIcon(weather.icon, pair.second)
                             }
 
                         },
@@ -65,14 +74,38 @@ class ForecastActivity : AppCompatActivity() {
                 )
         )
     }
-    private fun  getImageview(iconStr: String?, icon: ImageView) {
-        val url = image_url+ iconStr +extension
-        val imgRequest = ImageRequest(url,
-                Response.Listener<Bitmap> { response -> icon.setImageBitmap(response) }, 0, 0, icon.scaleType, Bitmap.Config.ARGB_8888, Response.ErrorListener { error ->
-            icon.setBackgroundColor(Color.parseColor("#ff0000"))
-            error.printStackTrace()
-        })
 
-        RequestManager.put(imgRequest)
+    private fun fetchAndShowIcon(iconStr: String?, icon: ImageView) {
+        val url = "${getString(R.string.api_image_endpoint)}$iconStr.png"
+
+        RequestManager.put(ImageRequest(
+                url,
+                Response.Listener<Bitmap> { response -> icon.setImageBitmap(response) },
+                0,
+                0,
+                icon.scaleType,
+                Bitmap.Config.ARGB_8888,
+                Response.ErrorListener { error ->
+                    icon.setBackgroundColor(Color.parseColor("#ff0000"))
+                    Toast.makeText(this, R.string.icon_fetch_failed_message, Toast.LENGTH_SHORT).show()
+                })
+        )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        with(outState){
+            putString("cityTextForecast", cityTextForecast.text.toString())
+
+            forecastSlots.forEachIndexed { i, pair ->
+                putString("textView$i", pair.first.text.toString())
+
+                // TODO: change way to pass icons, very poor efficiency
+                // how to store icon efficiently?
+                var icon = (pair.second.drawable as BitmapDrawable).bitmap
+                putParcelable("icon$i", icon)
+            }
+        }
     }
 }
