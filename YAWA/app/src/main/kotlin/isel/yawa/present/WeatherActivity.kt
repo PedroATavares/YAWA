@@ -2,6 +2,7 @@ package isel.yawa.present
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -18,13 +19,26 @@ class WeatherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_weather)
+
+        if(savedInstanceState == null){ // shouldnt have to do this check here
+            val url = intent.extras.getString("url")
+            getCurrentWeather(url)
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
 
-        val url = intent.extras.getString("url")
-        getCurrentWeather(url)
+        with(savedInstanceState){
+            populateViews(
+                    getString("cityText"),
+                    getString("weatherText"),
+                    getString("weatherDescText")
+            )
+
+            val icon : Bitmap = getParcelable("icon")
+            iconView.setImageBitmap(icon)
+        }
     }
 
     private fun getCurrentWeather(url: String){
@@ -32,11 +46,14 @@ class WeatherActivity : AppCompatActivity() {
                 GetWeatherRequest(
                         url,
                         { city ->
-                            cityText.text = city.name
 
                             val weather = city.weather.elementAt(0)
-                            weatherText.text = weather.main
-                            weatherDescText.text = weather.description
+
+                            populateViews(
+                                    city.name,
+                                    weather.main,
+                                    weather.description
+                            )
 
                             fetchAndShowIcon(weather.icon)
                         },
@@ -46,6 +63,12 @@ class WeatherActivity : AppCompatActivity() {
                         }
                 )
         )
+    }
+
+    private fun populateViews(cityName: String, _weatherText : String, _weatherDescText : String) {
+        cityText.text = cityName
+        weatherText.text = _weatherText
+        weatherDescText.text = _weatherDescText
     }
 
     private fun fetchAndShowIcon(icon: String?) {
@@ -65,5 +88,18 @@ class WeatherActivity : AppCompatActivity() {
 
     private fun  buildIconQueryUrl(icon: String?): String? {
         return "${resources.getString(R.string.api_image_endpoint)}$icon.png"
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        with(outState){
+            putString("cityText", cityText.text.toString())
+            putString("weatherText", weatherText.text.toString())
+            putString("weatherDescText", weatherDescText.text.toString())
+
+            var icon = (iconView.drawable as BitmapDrawable).bitmap
+            putParcelable("icon", icon) // TODO: this is expensive, find another solution
+        }
     }
 }
