@@ -1,6 +1,7 @@
 package isel.yawa.present
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val urlEncodedCity = city // urlEncode(city)
+        val urlEncodedCity = Uri.encode(city)
 
         if (radioButton_day5.isChecked)
             getCurrentForecastForCity(urlEncodedCity)

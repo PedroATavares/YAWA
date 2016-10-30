@@ -22,7 +22,7 @@ class GetWeatherRequest(url: String, success: (CityWheather) -> Unit, error: (Vo
 
             return Response.success(city, null)
         } catch (e: IOException) {
-            e.printStackTrace()
+
             return Response.error(VolleyError())
         }
     }

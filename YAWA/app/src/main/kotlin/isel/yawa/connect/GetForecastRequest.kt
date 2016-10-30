@@ -20,7 +20,6 @@ class GetForecastRequest(url: String, success: (CityForecast) -> Unit, error: (V
 
             return Response.success(city, null)
         } catch (e: IOException) {
-            e.printStackTrace()
             return Response.error(VolleyError())
         }
     }
