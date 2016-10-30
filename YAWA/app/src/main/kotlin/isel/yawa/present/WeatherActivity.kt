@@ -41,7 +41,7 @@ class WeatherActivity : AppCompatActivity() {
                             fetchAndShowIcon(weather.icon)
                         },
                         { error ->
-                            Toast.makeText(this, "Failure to retrieve weather information", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, R.string.get_current_weather_fail_message, Toast.LENGTH_SHORT).show()
                             throw error
                         }
                 )
@@ -58,7 +58,7 @@ class WeatherActivity : AppCompatActivity() {
                 Bitmap.Config.ARGB_8888,
                 Response.ErrorListener { error ->
                     iconView.setBackgroundColor(Color.parseColor("#ff0000"))
-                    Toast.makeText(this, "Failed to fetch weather icon", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.icon_fetch_failed_message, Toast.LENGTH_SHORT).show()
                 })
         )
     }

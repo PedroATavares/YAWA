@@ -1,5 +1,8 @@
 <resources>
+    <!-- UI related -->
+    <string name="no_connection_message" translatable="true">Oops, looks like there\'s no internet connection</string>
     <string name="app_name" translatable="false">YAWA - Yet Another Weather Application</string>
+    <string name="credits" translatable="true">Credits</string>
 
     <!-- API related -->
     <string name="api_key" translatable="false">appid=64ebb6f1a2a7abf9c9a91fedf34426dd</string>
@@ -8,8 +11,9 @@
     <string name="api_forecast_endpoint" translatable="false">forecast/</string>
     <string name="api_image_endpoint" translatable="false">http://openweathermap.org/img/w/</string>
 
-    <string name="credits">Credits</string>
-
     <!-- Weather display activity -->
+    <string name="get_current_weather_fail_message" translatable="true">Failure to retrieve current weather information</string>
+    <string name="get_forecast_fail_message" translatable="true">Failure to retrieve weather forecast</string>
+    <string name="icon_fetch_failed_message" translatable="true">Failed to fetch weather icon</string>
 
 </resources>

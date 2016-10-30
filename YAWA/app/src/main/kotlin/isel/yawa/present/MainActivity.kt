@@ -4,8 +4,10 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import isel.yawa.R
 import isel.yawa.connect.RequestManager
+import isel.yawa.connect.deviceHasConnection
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -23,22 +25,32 @@ class MainActivity : AppCompatActivity() {
         editText.setOnEditorActionListener({ tv, actionId, kev ->
             var enterPressed = actionId == EditorInfo.IME_ACTION_DONE
 
-            if (enterPressed && radioButton_day5.isChecked)
-                getCurrentForecastForCity(tv.text.toString())
-            else
-                if (enterPressed && today_button.isChecked)
-                    getCurrentWeatherForCity(tv.text.toString())
+            if (enterPressed){
+                val city = tv.text.toString()
+                doWeatherQuery(city)
+            }
 
             return@setOnEditorActionListener enterPressed // kotlin is weird, man
         })
 
         go_button.setOnClickListener {
-            if (radioButton_day5.isChecked)
-                getCurrentForecastForCity(editText.text.toString())
-            else
-                if (today_button.isChecked)
-                    getCurrentWeatherForCity(editText.text.toString())
+            val city = editText.text.toString()
+            doWeatherQuery(city)
         }
+    }
+
+    private fun  doWeatherQuery(city: String) {
+        if(!deviceHasConnection(this)){
+            Toast.makeText(this, R.string.no_connection_message, Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val urlEncodedCity = city // urlEncode(city)
+
+        if (radioButton_day5.isChecked)
+            getCurrentForecastForCity(urlEncodedCity)
+        else if(today_button.isChecked)
+            getCurrentWeatherForCity(urlEncodedCity)
     }
 
     private fun getCurrentWeatherForCity(city : String) {

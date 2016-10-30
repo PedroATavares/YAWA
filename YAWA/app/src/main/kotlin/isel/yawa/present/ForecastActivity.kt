@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import isel.yawa.R
@@ -57,7 +58,10 @@ class ForecastActivity : AppCompatActivity() {
                             }
 
                         },
-                        { error -> throw error }
+                        { error ->
+                            Toast.makeText(this, R.string.get_forecast_fail_message, Toast.LENGTH_SHORT).show()
+                            throw error
+                        }
                 )
         )
     }
