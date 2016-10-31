@@ -65,7 +65,6 @@ class ForecastActivity : AppCompatActivity() {
 
                                 fetchAndShowIcon(weather.icon, pair.second)
                             }
-
                         },
                         { error ->
                             Toast.makeText(this, R.string.get_forecast_fail_message, Toast.LENGTH_SHORT).show()

@@ -73,8 +73,9 @@ class MainActivity : AppCompatActivity() {
     private fun  buildQueryString(city: String,endPoint: String): String {
         var api_base = resources.getString(R.string.api_base_uri)
         var api_key = resources.getString(R.string.api_key)
+        var api_lang = resources.getString(R.string.api_lang)
 
-        return "${api_base}${endPoint}?${api_key}&q=${city}"
+        return "$api_base$endPoint?$api_key&q=$city&$api_lang"
     }
 
 }
