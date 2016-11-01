@@ -12,8 +12,9 @@ import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import isel.yawa.R
-import isel.yawa.connect.GetForecastRequest
+import isel.yawa.connect.DtoGetRequest
 import isel.yawa.connect.RequestManager
+import isel.yawa.model.CityForecast
 import kotlinx.android.synthetic.main.activity_forecast.*
 
 class ForecastActivity : AppCompatActivity() {
@@ -54,8 +55,9 @@ class ForecastActivity : AppCompatActivity() {
 
     private fun getCityForecast(url: String){
         RequestManager.put(
-                GetForecastRequest(
+                DtoGetRequest(
                         url,
+                        CityForecast::class.java,
                         { city ->
                             cityTextForecast.text = city.city.name
 

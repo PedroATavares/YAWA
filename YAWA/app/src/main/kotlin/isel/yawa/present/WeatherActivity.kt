@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import isel.yawa.R
-import isel.yawa.connect.GetWeatherRequest
+import isel.yawa.connect.DtoGetRequest
 import isel.yawa.connect.RequestManager
 import isel.yawa.model.CityWheather
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -28,7 +28,7 @@ class WeatherActivity : AppCompatActivity() {
         {
             populateFromWeather(weather,meter)
         }else
-            if(savedInstanceState == null){ // shouldnt have to do this check here
+            if(savedInstanceState == null){
                 val url = intent.extras.getString("url")
                 getCurrentWeather(url)
             }
@@ -52,8 +52,9 @@ class WeatherActivity : AppCompatActivity() {
 
     private fun getCurrentWeather(url: String){
         RequestManager.put(
-                GetWeatherRequest(
+                DtoGetRequest(
                         url,
+                        CityWheather::class.java,
                         { city ->
 
                             val weather = city.weather.elementAt(0)
@@ -62,7 +63,7 @@ class WeatherActivity : AppCompatActivity() {
                                     city.name,
                                     weather.main,
                                     weather.description,
-                                    "Temperature: " + city.main.temp.toString()+ " ºC"
+                                    "Temperature: " + city.main.temp.toString() + " ºC"
                             )
 
                             fetchAndShowIcon(weather.icon)
