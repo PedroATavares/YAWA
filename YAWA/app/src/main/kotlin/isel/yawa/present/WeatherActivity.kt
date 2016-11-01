@@ -63,7 +63,7 @@ class WeatherActivity : AppCompatActivity() {
                                     city.name,
                                     weather.main,
                                     weather.description,
-                                    "Temperature: " + city.main.temp.toString() + " ºC"
+                                    city.main.temp.toString()
                             )
 
                             fetchAndShowIcon(weather.icon)
@@ -80,7 +80,7 @@ class WeatherActivity : AppCompatActivity() {
         populateViews(intent.extras.getString("city"),
                 weather.main,
                 weather.description,
-                "Temperature: " +meter.temp.toString() + " ºC"
+                meter.temp.toString()
                 )
 
         fetchAndShowIcon(weather.icon)
@@ -90,7 +90,7 @@ class WeatherActivity : AppCompatActivity() {
         cityText.text = cityName
         weatherText.text = _weatherText
         weatherDescText.text = _weatherDescText
-        medTemp.text= _medTemp
+        medTemp.text= "${resources.getString(R.string.weather_detail_temp)} $_medTemp ${resources.getString(R.string.weather_detail_unit)}"
 
     }
 

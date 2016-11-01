@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="credits">Créditos</string>
-    <string name="forecast_description">Descrição</string>
+    <string name="weather_forecast_description">Descrição</string>
     <string name="get_current_weather_fail_message">Falha ao obter informação de tempo atual</string>
     <string name="get_forecast_fail_message">Falha ao obter previsão do tempo</string>
     <string name="icon_fetch_failed_message">Falha ao ao obter icone do tempo</string>
@@ -11,4 +11,10 @@
     <string name="text_field_default">Insira o nome da cidade</string>
     <string name="today_button_default">Hoje</string>
     <string name="api_lang">lang=pt</string>
+    <string name="weather_detail_temp">"Temperatura: "</string>
+    <string name="weather_forecast_in_2_days">Em 2 dias</string>
+    <string name="weather_forecast_in_3_days">Em 3 dias</string>
+    <string name="weather_forecast_in_4_days">Em 4 dias</string>
+    <string name="weather_forecast_today">Hoje</string>
+    <string name="weather_forecast_tomorrow">Amanhã</string>
 </resources>

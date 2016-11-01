@@ -65,7 +65,7 @@ class ForecastActivity : AppCompatActivity() {
                                 val weather = city.list.elementAt(i * 8).weather.elementAt(0)
                                 val meter= city.list.elementAt(i * 8).main
 
-                                pair.first.text = "${getString(R.string.forecast_description)} ${weather.description}"
+                                pair.first.text = "${getString(R.string.weather_forecast_description)} ${weather.description}"
                                 pair.first.setOnClickListener {
                                     val myIntent = Intent(this, WeatherActivity::class.java)
 

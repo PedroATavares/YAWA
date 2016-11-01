@@ -1,8 +1,17 @@
 <resources>
     <!-- UI related -->
-    <string name="no_connection_message" translatable="true">Oops, looks like there\'s no internet connection</string>
     <string name="app_name" translatable="false">YAWA - Yet Another Weather Application</string>
-    <string name="credits" translatable="true">Credits</string>
+    <string name="no_connection_message">Oops, looks like there\'s no internet connection</string>
+    <string name="get_current_weather_fail_message">Failure to retrieve current weather information</string>
+    <string name="get_forecast_fail_message">Failure to retrieve weather forecast</string>
+    <string name="icon_fetch_failed_message">Failed to fetch weather icon</string>
+
+    <!-- Main Activity -->
+    <string name="text_field_default">Enter the city name</string>
+    <string name="today_button_default">Today</string>
+    <string name="_5_day_button_default">5 day</string>
+    <string name="go">Go</string>
+    <string name="credits">Credits</string>
 
     <!-- API related -->
     <string name="api_key" translatable="false">appid=64ebb6f1a2a7abf9c9a91fedf34426dd</string>
@@ -10,18 +19,18 @@
     <string name="api_weather_endpoint" translatable="false">weather/</string>
     <string name="api_forecast_endpoint" translatable="false">forecast/</string>
     <string name="api_image_endpoint" translatable="false">http://openweathermap.org/img/w/</string>
-    <string name="api_lang" translatable="true">lang=en</string>
+    <string name="api_lang">lang=en</string>
 
-    <!-- Weather display activity -->
-    <string name="get_current_weather_fail_message" translatable="true">Failure to retrieve current weather information</string>
-    <string name="get_forecast_fail_message" translatable="true">Failure to retrieve weather forecast</string>
-    <string name="icon_fetch_failed_message" translatable="true">Failed to fetch weather icon</string>
+    <!-- Weather detail activity -->
+    <string name="weather_detail_temp">Temperature: </string>
+    <string name="weather_detail_unit" translatable="false">ºC</string>
 
     <!-- Forecast Activity -->
-    <string name="forecast_description" translatable="true">Description: </string>
-    <string name="text_field_default">Enter the city name</string>
-    <string name="today_button_default">Today</string>
-    <string name="_5_day_button_default">5 day</string>
-    <string name="go">Go</string>
+    <string name="weather_forecast_description">Description: </string>
+    <string name="weather_forecast_today">Today</string>
+    <string name="weather_forecast_tomorrow">Tomorrow</string>
+    <string name="weather_forecast_in_2_days">In 2 days</string>
+    <string name="weather_forecast_in_3_days">In 3 days</string>
+    <string name="weather_forecast_in_4_days">In 4 days</string>
 
 </resources>
