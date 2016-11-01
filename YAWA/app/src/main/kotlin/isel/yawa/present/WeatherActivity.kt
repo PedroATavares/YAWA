@@ -11,7 +11,7 @@ import com.android.volley.toolbox.ImageRequest
 import isel.yawa.R
 import isel.yawa.connect.DtoGetRequest
 import isel.yawa.connect.RequestManager
-import isel.yawa.model.CityWheather
+import isel.yawa.model.CityWeather
 import kotlinx.android.synthetic.main.activity_weather.*
 
 class WeatherActivity : AppCompatActivity() {
@@ -21,14 +21,13 @@ class WeatherActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_weather)
 
-        val weather = intent.extras.getParcelable<CityWheather.Weather>("weather")
-        val meter= intent.extras.getParcelable<CityWheather.Meteorology>("meter")
+        val weather = intent.extras.getParcelable<CityWeather.Weather>("weather")
+        val meter= intent.extras.getParcelable<CityWeather.Meteorology>("meter")
 
         if(weather !=null && meter!= null)
         {
             populateFromWeather(weather,meter)
-        }else
-            if(savedInstanceState == null){
+        }else if(savedInstanceState == null){
                 val url = intent.extras.getString("url")
                 getCurrentWeather(url)
             }
@@ -54,7 +53,7 @@ class WeatherActivity : AppCompatActivity() {
         RequestManager.put(
                 DtoGetRequest(
                         url,
-                        CityWheather::class.java,
+                        CityWeather::class.java,
                         { city ->
 
                             val weather = city.weather.elementAt(0)
@@ -76,7 +75,7 @@ class WeatherActivity : AppCompatActivity() {
         )
     }
 
-    private fun populateFromWeather(weather:CityWheather.Weather, meter: CityWheather.Meteorology){
+    private fun populateFromWeather(weather: CityWeather.Weather, meter: CityWeather.Meteorology){
         populateViews(intent.extras.getString("city"),
                 weather.main,
                 weather.description,
@@ -122,7 +121,7 @@ class WeatherActivity : AppCompatActivity() {
             putString("weatherDescText", weatherDescText.text.toString())
             putString("medTemp", medTemp.text.toString())
 
-            var icon = (iconView.drawable as BitmapDrawable).bitmap
+            val icon = (iconView.drawable as BitmapDrawable).bitmap
             putParcelable("icon", icon) // TODO: this is expensive, find another solution
         }
     }

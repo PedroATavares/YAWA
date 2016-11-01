@@ -15,6 +15,7 @@ import isel.yawa.R
 import isel.yawa.connect.DtoGetRequest
 import isel.yawa.connect.RequestManager
 import isel.yawa.model.CityForecast
+import isel.yawa.model.CityWeather
 import kotlinx.android.synthetic.main.activity_forecast.*
 
 class ForecastActivity : AppCompatActivity() {
@@ -63,30 +64,14 @@ class ForecastActivity : AppCompatActivity() {
 
                             forecastSlots.forEachIndexed { i, pair ->
                                 val weather = city.list.elementAt(i * 8).weather.elementAt(0)
-                                val meter= city.list.elementAt(i * 8).main
+                                val meter = city.list.elementAt(i * 8).main
 
                                 pair.first.text = "${getString(R.string.weather_forecast_description)} ${weather.description}"
-                                pair.first.setOnClickListener {
-                                    val myIntent = Intent(this, WeatherActivity::class.java)
 
-                                    myIntent.putExtra("weather", weather)
-                                    myIntent.putExtra("city", city.city.name)
-                                    myIntent.putExtra("meter", meter)
-
-                                    startActivity(myIntent)
-                                }
+                                pair.first.setOnClickListener { onItemClick(city, meter, weather) }
+                                pair.second.setOnClickListener { onItemClick(city, meter, weather) }
 
                                 fetchAndShowIcon(weather.icon, pair.second)
-
-                                pair.second.setOnClickListener {
-                                    val myIntent = Intent(this, WeatherActivity::class.java)
-
-                                    myIntent.putExtra("weather", weather)
-                                    myIntent.putExtra("city", city.city.name)
-                                    myIntent.putExtra("meter", meter)
-
-                                    startActivity(myIntent)
-                                }
                             }
                         },
                         { error ->
@@ -95,6 +80,16 @@ class ForecastActivity : AppCompatActivity() {
                         }
                 )
         )
+    }
+
+    private fun onItemClick(city: CityForecast, meter: CityWeather.Meteorology, weather: CityWeather.Weather) {
+        val myIntent = Intent(this, WeatherActivity::class.java)
+
+        myIntent.putExtra("weather", weather)
+        myIntent.putExtra("city", city.city.name)
+        myIntent.putExtra("meter", meter)
+
+        startActivity(myIntent)
     }
 
     private fun fetchAndShowIcon(iconStr: String?, icon: ImageView) {
@@ -125,7 +120,7 @@ class ForecastActivity : AppCompatActivity() {
 
                 // TODO: change way to pass icons, very poor efficiency
                 // how to store icon efficiently?
-                var icon = (pair.second.drawable as BitmapDrawable).bitmap
+                val icon = (pair.second.drawable as BitmapDrawable).bitmap
                 putParcelable("icon$i", icon)
             }
         }

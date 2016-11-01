@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         editText.setOnEditorActionListener({ tv, actionId, kev ->
-            var enterPressed = actionId == EditorInfo.IME_ACTION_DONE
+            val enterPressed = actionId == EditorInfo.IME_ACTION_DONE
 
             if (enterPressed){
                 val city = tv.text.toString()
@@ -71,9 +71,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun  buildQueryString(city: String,endPoint: String): String {
-        var api_base = resources.getString(R.string.api_base_uri)
-        var api_key = resources.getString(R.string.api_key)
-        var api_lang = resources.getString(R.string.api_lang)
+        val api_base = resources.getString(R.string.api_base_uri)
+        val api_key = resources.getString(R.string.api_key)
+        val api_lang = resources.getString(R.string.api_lang)
 
         return "$api_base$endPoint?$api_key&q=$city&$api_lang&units=metric"
     }

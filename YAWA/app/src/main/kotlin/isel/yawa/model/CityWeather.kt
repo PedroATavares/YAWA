@@ -2,10 +2,11 @@ package isel.yawa.model;
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.util.*
+import java.util.Collections
 
 
-data class CityWheather(val name:String, val weather: Collection<Weather>, val main : Meteorology){
+data class CityWeather(val name:String, val weather: Collection<Weather>, val main : Meteorology){
+    @Suppress("unused")
     constructor() : this("", Collections.emptyList(), Meteorology())
 
     data class Weather(val main: String,
@@ -14,7 +15,6 @@ data class CityWheather(val name:String, val weather: Collection<Weather>, val m
 
 
         companion object {
-            /** Factory of MovieCollectionqç instances */
             @JvmField @Suppress("unused")
             val CREATOR = object : Parcelable.Creator<Weather> {
                 override fun createFromParcel(source: Parcel) = Weather(source)
@@ -32,7 +32,7 @@ data class CityWheather(val name:String, val weather: Collection<Weather>, val m
            }
         }
 
-
+        @Suppress("unused")
         constructor() : this("", "","")
 
         constructor(source :Parcel ): this(
@@ -51,7 +51,6 @@ data class CityWheather(val name:String, val weather: Collection<Weather>, val m
 
 
         companion object {
-            /** Factory of MovieCollectionqç instances */
             @JvmField @Suppress("unused")
             val CREATOR = object : Parcelable.Creator<Meteorology> {
                 override fun createFromParcel(source: Parcel) = Meteorology(source)
