@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         var api_key = resources.getString(R.string.api_key)
         var api_lang = resources.getString(R.string.api_lang)
 
-        return "$api_base$endPoint?$api_key&q=$city&$api_lang"
+        return "$api_base$endPoint?$api_key&q=$city&$api_lang&units=metric"
     }
 
 }

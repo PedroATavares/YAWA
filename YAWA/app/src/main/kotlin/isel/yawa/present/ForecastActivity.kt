@@ -1,5 +1,6 @@
 package isel.yawa.present
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -60,10 +61,30 @@ class ForecastActivity : AppCompatActivity() {
 
                             forecastSlots.forEachIndexed { i, pair ->
                                 val weather = city.list.elementAt(i * 8).weather.elementAt(0)
+                                val meter= city.list.elementAt(i * 8).main
 
                                 pair.first.text = "${getString(R.string.forecast_description)} ${weather.description}"
+                                pair.first.setOnClickListener {
+                                    val myIntent = Intent(this, WeatherActivity::class.java)
+
+                                    myIntent.putExtra("weather", weather)
+                                    myIntent.putExtra("city", city.city.name)
+                                    myIntent.putExtra("meter", meter)
+
+                                    startActivity(myIntent)
+                                }
 
                                 fetchAndShowIcon(weather.icon, pair.second)
+
+                                pair.second.setOnClickListener {
+                                    val myIntent = Intent(this, WeatherActivity::class.java)
+
+                                    myIntent.putExtra("weather", weather)
+                                    myIntent.putExtra("city", city.city.name)
+                                    myIntent.putExtra("meter", meter)
+
+                                    startActivity(myIntent)
+                                }
                             }
                         },
                         { error ->

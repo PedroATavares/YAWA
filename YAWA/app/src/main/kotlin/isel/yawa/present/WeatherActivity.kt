@@ -11,6 +11,7 @@ import com.android.volley.toolbox.ImageRequest
 import isel.yawa.R
 import isel.yawa.connect.GetWeatherRequest
 import isel.yawa.connect.RequestManager
+import isel.yawa.model.CityWheather
 import kotlinx.android.synthetic.main.activity_weather.*
 
 class WeatherActivity : AppCompatActivity() {
@@ -20,10 +21,17 @@ class WeatherActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_weather)
 
-        if(savedInstanceState == null){ // shouldnt have to do this check here
-            val url = intent.extras.getString("url")
-            getCurrentWeather(url)
-        }
+        val weather = intent.extras.getParcelable<CityWheather.Weather>("weather")
+        val meter= intent.extras.getParcelable<CityWheather.Meteorology>("meter")
+
+        if(weather !=null && meter!= null)
+        {
+            populateFromWeather(weather,meter)
+        }else
+            if(savedInstanceState == null){ // shouldnt have to do this check here
+                val url = intent.extras.getString("url")
+                getCurrentWeather(url)
+            }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -33,7 +41,8 @@ class WeatherActivity : AppCompatActivity() {
             populateViews(
                     getString("cityText"),
                     getString("weatherText"),
-                    getString("weatherDescText")
+                    getString("weatherDescText"),
+                    getString("medTemp")
             )
 
             val icon : Bitmap = getParcelable("icon")
@@ -52,7 +61,8 @@ class WeatherActivity : AppCompatActivity() {
                             populateViews(
                                     city.name,
                                     weather.main,
-                                    weather.description
+                                    weather.description,
+                                    "Temperature: " + city.main.temp.toString()+ " ºC"
                             )
 
                             fetchAndShowIcon(weather.icon)
@@ -65,10 +75,22 @@ class WeatherActivity : AppCompatActivity() {
         )
     }
 
-    private fun populateViews(cityName: String, _weatherText : String, _weatherDescText : String) {
+    private fun populateFromWeather(weather:CityWheather.Weather, meter: CityWheather.Meteorology){
+        populateViews(intent.extras.getString("city"),
+                weather.main,
+                weather.description,
+                "Temperature: " +meter.temp.toString() + " ºC"
+                )
+
+        fetchAndShowIcon(weather.icon)
+    }
+
+    private fun populateViews(cityName: String, _weatherText : String, _weatherDescText : String, _medTemp: String) {
         cityText.text = cityName
         weatherText.text = _weatherText
         weatherDescText.text = _weatherDescText
+        medTemp.text= _medTemp
+
     }
 
     private fun fetchAndShowIcon(icon: String?) {
@@ -97,6 +119,7 @@ class WeatherActivity : AppCompatActivity() {
             putString("cityText", cityText.text.toString())
             putString("weatherText", weatherText.text.toString())
             putString("weatherDescText", weatherDescText.text.toString())
+            putString("medTemp", medTemp.text.toString())
 
             var icon = (iconView.drawable as BitmapDrawable).bitmap
             putParcelable("icon", icon) // TODO: this is expensive, find another solution
