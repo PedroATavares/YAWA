@@ -17,4 +17,5 @@
     <string name="weather_forecast_in_4_days">Em 4 dias</string>
     <string name="weather_forecast_today">Hoje</string>
     <string name="weather_forecast_tomorrow">Amanhã</string>
+    <string name="powered_by">Patrocinado por</string>
 </resources>

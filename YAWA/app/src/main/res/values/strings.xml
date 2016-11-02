@@ -33,4 +33,16 @@
     <string name="weather_forecast_in_3_days">In 3 days</string>
     <string name="weather_forecast_in_4_days">In 4 days</string>
 
+    <!-- Credits Activty -->
+    <string name="api_link" translatable="false">http://openweathermap.org</string>
+    <string name="powered_by">Powered By</string>
+    <string name="github_href" translatable="false">https://github.com/</string>
+    <string name="luis" translatable="false">Luis Moreira</string>
+    <string name="pedro" translatable="false">Pedro Arnauth</string>
+    <string name="joao" translatable="false">João Correia</string>
+    <string name="luis_github" translatable="false">Manchs12</string>
+    <string name="pedro_github" translatable="false">PedroATavares</string>
+    <string name="joao_github" translatable="false">Dude29</string>
+
+
 </resources>
