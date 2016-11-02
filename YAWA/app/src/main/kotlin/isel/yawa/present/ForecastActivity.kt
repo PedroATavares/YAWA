@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.activity_forecast.*
 class ForecastActivity : AppCompatActivity() {
 
     private lateinit  var forecastSlots : Array<Pair<TextView, ImageView>>
+    private var cityForecast: CityForecast =CityForecast()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,9 @@ class ForecastActivity : AppCompatActivity() {
 
         with(savedInstanceState){
             cityTextForecast.text = getString("cityTextForecast")
+            cityForecast=getParcelable<CityForecast>("city")
+            
+            setListeners(cityForecast)
 
             forecastSlots.forEachIndexed { i, pair ->
                 pair.first.text = getString("textView$i")
@@ -60,19 +65,10 @@ class ForecastActivity : AppCompatActivity() {
                         url,
                         CityForecast::class.java,
                         { city ->
-                            cityTextForecast.text = city.city.name
 
-                            forecastSlots.forEachIndexed { i, pair ->
-                                val weather = city.list.elementAt(i * 8).weather.elementAt(0)
-                                val meter = city.list.elementAt(i * 8).main
+                            cityForecast=city
 
-                                pair.first.text = "${getString(R.string.weather_forecast_description)} ${weather.description}"
-
-                                pair.first.setOnClickListener { onItemClick(city, meter, weather) }
-                                pair.second.setOnClickListener { onItemClick(city, meter, weather) }
-
-                                fetchAndShowIcon(weather.icon, pair.second)
-                            }
+                            setListeners(city)
                         },
                         { error ->
                             Toast.makeText(this, R.string.get_forecast_fail_message, Toast.LENGTH_SHORT).show()
@@ -80,6 +76,22 @@ class ForecastActivity : AppCompatActivity() {
                         }
                 )
         )
+    }
+
+    private fun setListeners(city: CityForecast) {
+        cityTextForecast.text = city.city.name
+
+        forecastSlots.forEachIndexed { i, pair ->
+            val weather = city.list.elementAt(i * 8).weather.elementAt(0)
+            val meter = city.list.elementAt(i * 8).main
+
+            pair.first.text = "${getString(R.string.weather_forecast_description)} ${weather.description}"
+
+            pair.first.setOnClickListener { onItemClick(city, meter, weather) }
+            pair.second.setOnClickListener { onItemClick(city, meter, weather) }
+
+            fetchAndShowIcon(weather.icon, pair.second)
+        }
     }
 
     private fun onItemClick(city: CityForecast, meter: CityWeather.Meteorology, weather: CityWeather.Weather) {
@@ -114,7 +126,7 @@ class ForecastActivity : AppCompatActivity() {
 
         with(outState){
             putString("cityTextForecast", cityTextForecast.text.toString())
-
+            putParcelable("city", cityForecast)
             forecastSlots.forEachIndexed { i, pair ->
                 putString("textView$i", pair.first.text.toString())
 

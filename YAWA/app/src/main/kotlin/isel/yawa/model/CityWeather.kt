@@ -32,14 +32,14 @@ data class CityWeather(val name:String, val weather: Collection<Weather>, val ma
            }
         }
 
-        @Suppress("unused")
-        constructor() : this("", "","")
-
         constructor(source :Parcel ): this(
                 main = source.readString(),
                 description = source.readString(),
                 icon = source.readString()
         )
+
+        @Suppress("unused")
+        constructor() : this("", "","")
 
     }
 
