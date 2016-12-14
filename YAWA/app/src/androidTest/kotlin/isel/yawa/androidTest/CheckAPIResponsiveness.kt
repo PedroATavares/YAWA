@@ -8,7 +8,9 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import isel.yawa.connect.GetForecastRequest
+import isel.yawa.connect.DtoGetRequest
+import isel.yawa.model.CityForecast
+import isel.yawa.model.CityWeather
 
 import org.junit.Before
 import org.junit.Test
@@ -85,10 +87,11 @@ class CheckAPIResponsiveness {
     @Test
     fun test_successfulResponseParsing() {
         requestQueue.add(
-                GetForecastRequest(
-                    LONDON_WEATHER_URL,
-                    { wt -> executeAndPublishResult { assertNotNull(wt) } },
-                    { error -> executeAndPublishResult { fail() } }
+                DtoGetRequest<CityWeather>(
+                        LONDON_WEATHER_URL,
+                        CityWeather::class.java,
+                        { wt -> executeAndPublishResult { assertNotNull(wt) } },
+                        { error -> executeAndPublishResult { fail() } }
                 )
         )
 
