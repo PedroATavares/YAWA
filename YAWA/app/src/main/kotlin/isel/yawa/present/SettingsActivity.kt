@@ -1,10 +1,14 @@
 package isel.yawa.present
 
+
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import isel.yawa.R
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.util.*
 
@@ -40,12 +44,38 @@ class SettingsActivity : AppCompatActivity() {
         list.adapter=adapter;
 
         addBtn.setOnClickListener {
+            if(!editCity.text.isEmpty()) {
+                listItems!!.add(editCity.text.toString())
+                editCity.text.clear()
+                editor.putStringSet("cities", listItems!!.toSet())
+                editor.commit()
+                adapter!!.notifyDataSetChanged()
+            }
+        }
 
-            listItems!!.add("Clicked : "+clickCounter++)
-            editor.putStringSet("cities", listItems!!.toSet())
+        clearBtn.setOnClickListener {
+            editor.clear()
             editor.commit()
-            listItems= ArrayList<String>(sharedPref.getStringSet("cities",HashSet<String>()))
+            listItems!!.clear()
             adapter!!.notifyDataSetChanged()
         }
+
+        list.setOnItemClickListener { adapterView, view, idx,
+                                      l ->
+            val builder1 = AlertDialog.Builder(this)
+            builder1.setTitle("Delete Entry")
+            builder1.setMessage("Do you want to delete entry?")
+            builder1.setCancelable(true)
+            builder1.setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialogInterface, i ->
+                listItems!!.removeAt(idx)
+                editor.putStringSet("cities", listItems!!.toSet())
+                editor.commit()
+                adapter!!.notifyDataSetChanged()
+            })
+            builder1.setNegativeButton(android.R.string.no,DialogInterface.OnClickListener { dialogInterface, i ->  })
+            builder1.show()
+        }
+
+
     }
 }

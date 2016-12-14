@@ -10,18 +10,41 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="isel.yawa.present.SettingsActivity">
 
+
     <Button
         android:id="@+id/addBtn"
         android:text="Add New Item"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginTop="74dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text|textPersonName"
+        android:ems="10"
+        android:id="@+id/editCity"
+        android:hint="@string/text_field_default"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="21dp" />
+
+    <Button
+        android:id="@+id/clearBtn"
+        android:text="Clear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addBtn"
+        android:layout_alignParentStart="true" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:drawSelectorOnTop="false"
-        />
+        android:layout_below="@+id/clearBtn"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
