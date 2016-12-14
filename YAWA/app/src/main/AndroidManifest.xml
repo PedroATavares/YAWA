@@ -23,6 +23,14 @@
         <activity android:name=".present.WeatherActivity" />
         <activity android:name=".present.ForecastActivity" />
         <activity android:name=".present.SettingsActivity"></activity>
+
+        <provider
+            android:name="isel.yawa.model.content.WeatherProvider"
+            android:authorities="isel.yawa"
+            android:enabled="true"
+            android:exported="false"
+            android:multiprocess="false" />
+
     </application>
 
 </manifest>
