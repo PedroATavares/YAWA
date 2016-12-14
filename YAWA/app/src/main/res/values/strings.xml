@@ -12,6 +12,7 @@
     <string name="_5_day_button_default">5 day</string>
     <string name="go">Go</string>
     <string name="credits">Credits</string>
+    <string name="settings">Settings</string>
 
     <!-- API related -->
     <string name="api_key" translatable="false">appid=64ebb6f1a2a7abf9c9a91fedf34426dd</string>

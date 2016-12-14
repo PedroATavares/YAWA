@@ -21,6 +21,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, CreditsActivity::class.java));
         }
 
+        settings_button.setOnClickListener{
+            startActivity(Intent(this, SettingsActivity::class.java));
+        }
+
         editText.setOnEditorActionListener({ tv, actionId, kev ->
             val enterPressed = actionId == EditorInfo.IME_ACTION_DONE
 

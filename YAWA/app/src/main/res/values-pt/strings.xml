@@ -8,6 +8,7 @@
     <string name="no_connection_message">Oops, parece que não há conexão</string>
     <string name="_5_day_button_default">5 dias</string>
     <string name="go">Ir</string>
+    <string name="settings">Defenições</string>
     <string name="text_field_default">Insira o nome da cidade</string>
     <string name="today_button_default">Hoje</string>
     <string name="api_lang">lang=pt</string>
