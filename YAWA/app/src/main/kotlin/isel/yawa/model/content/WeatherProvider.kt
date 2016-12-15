@@ -130,11 +130,8 @@ class WeatherProvider : ContentProvider(){
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
         val table = resolveTableFromUri(uri)
 
-        val db = dbHelper.writableDatabase
-        return try{
-            db.delete(table, selection, selectionArgs)
-        }finally {
-            db.close()
+        return dbHelper.writableDatabase.use {
+            it.delete(table, selection, selectionArgs)
         }
     }
 
@@ -142,9 +139,8 @@ class WeatherProvider : ContentProvider(){
         validateContentValues(values)
 
         val table = resolveTableFromUri(uri)
-        val db = dbHelper.writableDatabase
-        return try {
-            val id = db.insert(table, null, values)
+        return dbHelper.writableDatabase.use {
+            val id = it.insert(table, null, values)
 
             if (id < 0)
                 throw SQLException("Insertion in $uri failed")
@@ -152,9 +148,6 @@ class WeatherProvider : ContentProvider(){
             context.contentResolver.notifyChange(uri, null)
             // don't think this is relevant for this provider's use case
             Uri.parse("content://$AUTHORITY/$WEATHER_TABLE_NAME/$id")
-        }
-        finally {
-            db.close()
         }
     }
 
@@ -171,6 +164,7 @@ class WeatherProvider : ContentProvider(){
 
         val db = dbHelper.readableDatabase
         return try {
+            // ProxyCursor(cursor) // overrides close and closes db
             db.query(table, projection, selection, selectionArgs, null, null, sortOrder)
         }
         finally {
@@ -182,11 +176,8 @@ class WeatherProvider : ContentProvider(){
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selArgs: Array<String>?): Int {
         val table = resolveTableFromUri(uri)
 
-        val db = dbHelper.readableDatabase
-        return try{
-            db.update(table, values, selection, selArgs)
-        }finally{
-            db.close()
+        return dbHelper.readableDatabase.use{
+            it.update(table, values, selection, selArgs)
         }
     }
 }
