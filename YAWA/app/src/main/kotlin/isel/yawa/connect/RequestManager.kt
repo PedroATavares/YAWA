@@ -43,4 +43,4 @@ fun Context.buildWeatherQueryString(city : String) =
         buildQueryString(city, resources.getString(R.string.api_weather_endpoint))
 
 fun Context.buildForecastQueryString(city : String) =
-        buildQueryString(city, resources.getString(R.string.api_weather_endpoint))
+        buildQueryString(city, resources.getString(R.string.api_forecast_endpoint))
