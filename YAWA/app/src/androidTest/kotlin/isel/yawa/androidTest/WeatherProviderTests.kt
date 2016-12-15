@@ -19,7 +19,7 @@ class WeatherProviderTests() : ProviderTestCase2<WeatherProvider>(WeatherProvide
                     COLUMN_TEMP,
                     COLUMN_TEMP_MIN,
                     COLUMN_TEMP_MAX,
-                    COLUMN_TEMP_KF,
+                    COLUMN_PRESSURE,
                     COLUMN_HUMIDITY,
                     COLUMN_MAIN,
                     COLUMN_DESCRIPTION,
@@ -40,10 +40,11 @@ class WeatherProviderTests() : ProviderTestCase2<WeatherProvider>(WeatherProvide
         dummyRowID = insertData(
                 DUMMY_DATE,
                 DUMMY_CITY,
+                "Portugal",
                 4.0,
                 2.1,
                 5.8,
-                -1.23,
+                123,
                 95,
                 "Cloudy",
                 "not cool",
@@ -51,19 +52,22 @@ class WeatherProviderTests() : ProviderTestCase2<WeatherProvider>(WeatherProvide
         )?.lastPathSegment?.toInt()
     }
 
-    private fun insertData(date: Long, city: String?, temp: Double, tempMin: Double, tempMax: Double,
-                           tempKf: Double, humidity: Int, main: String?, desc: String?, icon_url: String?): Uri? {
+    private fun insertData(date: Long, city: String?, country: String?, temp: Double, tempMin: Double, tempMax: Double,
+                           pressure: Int, humidity: Int, main: String?, desc: String?, icon_url: String?): Uri? {
         val data = ContentValues().apply {
-            put(WeatherProvider.COLUMN_DATE, date)
-            if(city != null) put(WeatherProvider.COLUMN_CITY, city) else putNull(WeatherProvider.COLUMN_CITY);
-            put(WeatherProvider.COLUMN_TEMP, temp)
-            put(WeatherProvider.COLUMN_TEMP_MIN, tempMin)
-            put(WeatherProvider.COLUMN_TEMP_MAX, tempMax)
-            put(WeatherProvider.COLUMN_TEMP_KF, tempKf)
-            put(WeatherProvider.COLUMN_HUMIDITY, humidity)
-            if(city != null) put(WeatherProvider.COLUMN_MAIN, main) else putNull(WeatherProvider.COLUMN_MAIN);
-            put(WeatherProvider.COLUMN_DESCRIPTION, desc)
-            put(WeatherProvider.COLUMN_ICON_URL, icon_url)
+            with(WeatherProvider){
+                put(COLUMN_DATE, date)
+                if(city != null) put(COLUMN_CITY, city) else putNull(COLUMN_CITY);
+                put(COLUMN_COUNTRY, country)
+                put(COLUMN_TEMP, temp)
+                put(COLUMN_TEMP_MIN, tempMin)
+                put(COLUMN_TEMP_MAX, tempMax)
+                put(COLUMN_PRESSURE, pressure)
+                put(COLUMN_HUMIDITY, humidity)
+                if(city != null) put(COLUMN_MAIN, main) else putNull(COLUMN_MAIN);
+                put(COLUMN_DESCRIPTION, desc)
+                put(COLUMN_ICON_URL, icon_url)
+            }
         }
 
         return mockContentResolver.insert(WeatherProvider.WEATHER_CONTENT_URI, data)
@@ -105,14 +109,15 @@ class WeatherProviderTests() : ProviderTestCase2<WeatherProvider>(WeatherProvide
             insertData(
                     0,
                     null, // can not be null
-                    1.0,
+                    null,
                     1.0,
                     1.0,
                     1.0,
                     1,
-                    null, // can not be null
+                    1, // can not be null
                     "test",
-                    "test"
+                    "test",
+                    null
             )
         }catch(t: Throwable){
             return
@@ -126,10 +131,11 @@ class WeatherProviderTests() : ProviderTestCase2<WeatherProvider>(WeatherProvide
         insertData(
                 DUMMY_DATE_B,
                 DUMMY_CITY_B,
+                "Portugal",
                 1.0,
                 1.0,
                 1.0,
-                1.0,
+                10,
                 1,
                 "Sunny",
                 "cool weather",

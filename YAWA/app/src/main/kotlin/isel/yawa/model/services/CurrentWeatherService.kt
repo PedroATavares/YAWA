@@ -7,11 +7,12 @@ import isel.yawa.connect.RequestManager
 import com.android.volley.toolbox.RequestFuture
 import com.android.volley.toolbox.JsonObjectRequest
 import isel.yawa.connect.buildWeatherQueryString
-import isel.yawa.model.CityWeather
+import isel.yawa.model.WeatherInfo
 import isel.yawa.model.content.WeatherProvider
+import isel.yawa.model.content.fromJsonObject
+import isel.yawa.model.content.toContentValues
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
-import isel.yawa.model.content.toContentValues
 
 /**
  * Fetches current weather info from API and stores said info in a content provider
@@ -39,18 +40,18 @@ class CurrentWeatherService : IntentService("fetch-thread"){
 
         RequestManager.put(request)
         try {
-            val response = future.get(MAX_WAIT_TIMEOUT_S, TimeUnit.SECONDS) // Blocks for at most 10 seconds.
-            // TODO: map response to domain obj
-            val cw = CityWeather()
+            val response = future.get(MAX_WAIT_TIMEOUT_S, TimeUnit.SECONDS)
+
+            val wInfo = WeatherInfo().fromJsonObject(response)
             
-            storeInContentProvider(cw)
+            storeInContentProvider(wInfo)
         } catch (t: Throwable) {
             Log.e("SRV", "Failure upon trying to fetch current weather info for $city", t)
             throw t;
         }
     }
 
-    private fun storeInContentProvider(weatherInfo : CityWeather){
+    private fun storeInContentProvider(weatherInfo : WeatherInfo){
         val mappedWeatherInfo = weatherInfo.toContentValues()
 
         contentResolver.insert(WeatherProvider.WEATHER_CONTENT_URI, mappedWeatherInfo)

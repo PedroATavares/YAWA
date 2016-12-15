@@ -31,10 +31,11 @@ class WeatherProvider : ContentProvider(){
         // Column definitions (name, index)
         val COLUMN_DATE         = "DATE"
         val COLUMN_CITY         = "CITY"
+        val COLUMN_COUNTRY      = "COUNTRY"
         val COLUMN_TEMP         = "T"
         val COLUMN_TEMP_MIN     = "T_MIN"
         val COLUMN_TEMP_MAX     = "T_MAX"
-        val COLUMN_TEMP_KF      = "T_KF"
+        val COLUMN_PRESSURE     = "PRESSURE"
         val COLUMN_HUMIDITY     = "HUMIDITY"
         val COLUMN_MAIN         = "MAIN"
         val COLUMN_DESCRIPTION  = "DESCRIPTION"
@@ -42,14 +43,15 @@ class WeatherProvider : ContentProvider(){
 
         val COLUMN_DATE_IDX        = 0
         val COLUMN_CITY_IDX        = 1
-        val COLUMN_TEMP_IDX        = 2
-        val COLUMN_TEMP_MIN_IDX    = 3
-        val COLUMN_TEMP_MAX_IDX    = 4
-        val COLUMN_TEMP_KF_IDX     = 5
-        val COLUMN_HUMIDITY_IDX    = 6
-        val COLUMN_MAIN_IDX        = 7
-        val COLUMN_DESCRIPTION_IDX = 8
-        val COLUMN_ICON_URL_IDX    = 9
+        val COLUMN_COUNTRY_IDX     = 2
+        val COLUMN_TEMP_IDX        = 3
+        val COLUMN_TEMP_MIN_IDX    = 4
+        val COLUMN_TEMP_MAX_IDX    = 5
+        val COLUMN_PRESSURE_IDX    = 6
+        val COLUMN_HUMIDITY_IDX    = 7
+        val COLUMN_MAIN_IDX        = 8
+        val COLUMN_DESCRIPTION_IDX = 9
+        val COLUMN_ICON_URL_IDX    = 10
     }
 
     // Helper instance for easier manipulation of the actual database
@@ -68,10 +70,11 @@ class WeatherProvider : ContentProvider(){
             val CREATE_CMD = "CREATE TABLE $WEATHER_TABLE_NAME ( " +
                     "$COLUMN_DATE INTEGER NOT NULL , " + // Unix time stamp
                     "$COLUMN_CITY TEXT NOT NULL , "+
+                    "$COLUMN_COUNTRY COUNTRY , "+
                     "$COLUMN_TEMP REAL , "+
                     "$COLUMN_TEMP_MIN REAL , "+
                     "$COLUMN_TEMP_MAX REAL , "+
-                    "$COLUMN_TEMP_KF REAL , "+
+                    "$COLUMN_PRESSURE INTEGER , "+
                     "$COLUMN_HUMIDITY INTEGER , "+
                     "$COLUMN_MAIN TEXT NOT NULL , "+
                     "$COLUMN_DESCRIPTION TEXT NOT NULL , "+
@@ -164,7 +167,7 @@ class WeatherProvider : ContentProvider(){
 
         val db = dbHelper.readableDatabase
         return try {
-            // ProxyCursor(cursor) // overrides close and closes db
+            // ProxyCursor(cursor) // overrides close and closes db aswell as cursor
             db.query(table, projection, selection, selectionArgs, null, null, sortOrder)
         }
         finally {
