@@ -35,7 +35,7 @@ class DtoGetRequest<DTO>(
     override fun parseNetworkResponse(response: NetworkResponse): Response<DTO> {
         try {
             val dto = mapper.readValue(response.data, dtoType)
-
+            // TODO: handle error responses better {message: "some msg", code:404}
             // this will make requests expire in 1hr
             return Response.success(dto, buildExpirableEntry(response))
         } catch (e: IOException) {

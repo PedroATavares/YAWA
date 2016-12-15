@@ -22,15 +22,18 @@
         <activity android:name=".present.CreditsActivity" />
         <activity android:name=".present.WeatherActivity" />
         <activity android:name=".present.ForecastActivity" />
-        <activity android:name=".present.SettingsActivity"></activity>
+        <activity android:name=".present.SettingsActivity" />
 
         <provider
-            android:name="isel.yawa.model.content.WeatherProvider"
+            android:name=".model.content.WeatherProvider"
             android:authorities="isel.yawa"
             android:enabled="true"
             android:exported="false"
             android:multiprocess="false" />
 
+        <service
+            android:name=".model.services.CurrentWeatherService"
+            android:exported="false"/>
     </application>
 
 </manifest>
