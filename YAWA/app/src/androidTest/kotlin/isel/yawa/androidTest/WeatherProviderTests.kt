@@ -5,10 +5,7 @@ import android.net.Uri
 import android.test.ProviderTestCase2
 import org.junit.*
 import isel.yawa.model.content.WeatherProvider;
-import junit.framework.Assert
-import java.sql.SQLException
 import kotlin.test.assertNotEquals
-import kotlin.test.expect
 
 // @RunWith(JUnit4::class)
 class WeatherProviderTests() : ProviderTestCase2<WeatherProvider>(WeatherProvider::class.java, WeatherProvider.AUTHORITY) {

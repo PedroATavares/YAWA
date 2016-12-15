@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import isel.yawa.R
+import isel.yawa.connect.buildForecastQueryString
+import isel.yawa.connect.buildWeatherQueryString
 import isel.yawa.connect.deviceHasConnection
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,35 +52,22 @@ class MainActivity : AppCompatActivity() {
         val urlEncodedCity = Uri.encode(city)
 
         if (radioButton_day5.isChecked)
-            getCurrentForecastForCity(urlEncodedCity)
+            getForecastForCity(urlEncodedCity)
         else if(today_button.isChecked)
             getCurrentWeatherForCity(urlEncodedCity)
     }
 
     private fun getCurrentWeatherForCity(city : String) {
-        val myIntent = Intent(this, WeatherActivity::class.java)
-
-        var qString : String = buildQueryString(city,resources.getString(R.string.api_weather_endpoint))
-        myIntent.putExtra("url", qString)
-
-        startActivity(myIntent)
+        startActivity(Intent(this, WeatherActivity::class.java).apply {
+            val qString : String = buildWeatherQueryString(city)
+            putExtra("url", qString)
+        })
     }
 
-    private fun getCurrentForecastForCity(city : String) {
-        val myIntent = Intent(this, ForecastActivity::class.java)
-
-        var qString : String = buildQueryString(city,resources.getString(R.string.api_forecast_endpoint));
-        myIntent.putExtra("url", qString)
-
-        startActivity(myIntent)
+    private fun getForecastForCity(city : String) {
+        startActivity(Intent(this, ForecastActivity::class.java).apply {
+            val qString : String = buildForecastQueryString(city)
+            putExtra("url", qString)
+        })
     }
-
-    private fun  buildQueryString(city: String,endPoint: String): String {
-        val api_base = resources.getString(R.string.api_base_uri)
-        val api_key = resources.getString(R.string.api_key)
-        val api_lang = resources.getString(R.string.api_lang)
-
-        return "$api_base$endPoint?$api_key&q=$city&$api_lang&units=metric"
-    }
-
 }

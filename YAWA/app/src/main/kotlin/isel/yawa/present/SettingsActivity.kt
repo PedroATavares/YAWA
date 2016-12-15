@@ -32,7 +32,7 @@ class SettingsActivity : AppCompatActivity() {
         if(!sharedPref.contains("cities")) {
             val set = HashSet<String>()
             editor.putStringSet("cities", set)
-            editor.commit()
+            editor.apply()
         }
 
         listItems = ArrayList<String>(sharedPref.getStringSet("cities",HashSet<String>()))
