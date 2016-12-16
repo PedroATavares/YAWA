@@ -166,14 +166,8 @@ class WeatherProvider : ContentProvider(){
         val table = resolveTableFromUri(uri)
 
         val db = dbHelper.readableDatabase
-        return try {
-            // ProxyCursor(cursor) // overrides close and closes db aswell as cursor
-            db.query(table, projection, selection, selectionArgs, null, null, sortOrder)
-        }
-        finally {
-            // TODO: figure out a way to safely expose cursor while ensuring close() of readableDatabase
-            // db.close() // this damn line made me waste almost 2 days of work
-        }
+
+        return db.query(table, projection, selection, selectionArgs, null, null, sortOrder)
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selArgs: Array<String>?): Int {
