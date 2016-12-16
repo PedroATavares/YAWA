@@ -2,6 +2,7 @@ package isel.yawa.model.content
 
 import android.content.ContentValues
 import isel.yawa.model.AmbientInfo
+import isel.yawa.model.WeatherForecast
 import isel.yawa.model.WeatherInfo
 import org.json.JSONObject
 
@@ -37,23 +38,31 @@ fun WeatherInfo.toContentValues() : ContentValues {
  * See link below for data format
  * http://api.openweathermap.org/data/2.5/weather/?appid=64ebb6f1a2a7abf9c9a91fedf34426dd&q=Lisboa&lang=pt&units=metric
  *
- * Constructs a WeatherInfo object from a JSONObject
+ * Constructs a WeatherInfo object from a JSONObject.
+ * Allows the user to specify how to create an AmbientInfo trough the use of a function
+ * which receives, as it's first parameter, the JSONObject that was passed to this function
  */
-fun WeatherInfo.fromJsonObject(json: JSONObject) : WeatherInfo = with(json){
-    val sys = getJSONObject("sys")
-    val weatherFirst = getJSONArray("weather").getJSONObject(0)
-    val  _main = getJSONObject("main")
+fun WeatherInfo.fromJsonObject(json: JSONObject, ambInfoFactory: () -> AmbientInfo) : WeatherInfo = apply {
+    with(json){
+        val sys = optJSONObject("sys")
+        val weatherFirst = getJSONArray("weather").getJSONObject(0)
 
-    this@fromJsonObject.apply {
-            date = getString("dt").toLong() // see warnings about lossy coercions in json.getLong() documentation
-            city = getString("name")
-            country = sys.getString("country")
-            main = weatherFirst.getString("main")
-            description = weatherFirst.getString("description")
-            ambientInfo = AmbientInfo().fromJsonObject(_main)
-            icon_url = weatherFirst.getString("icon")
+        date = getString("dt").toLong() // see warnings about lossy coercions in json.getLong() documentation
+        city = optString("name", null)
+        country = sys?.getString("country")
+        main = weatherFirst.getString("main")
+        description = weatherFirst.getString("description")
+        ambientInfo = ambInfoFactory()
+        icon_url = weatherFirst.getString("icon")
     }
 }
+
+fun WeatherInfo.fromJsonObject(json: JSONObject) : WeatherInfo =
+        fromJsonObject(json, {
+            val main = json.getJSONObject("main")
+            AmbientInfo().fromJsonObject(main)
+        })
+
 
 /*
  * See link below for data format(look for field named main)
@@ -61,8 +70,8 @@ fun WeatherInfo.fromJsonObject(json: JSONObject) : WeatherInfo = with(json){
  *
  * Constructs an AmbientInfo object from a JSONObject
  */
-fun AmbientInfo.fromJsonObject(main: JSONObject) : AmbientInfo = with(main){
-    this@fromJsonObject.apply {
+fun AmbientInfo.fromJsonObject(main: JSONObject) : AmbientInfo = apply {
+    with(main){
         temp = getDouble("temp")
         tempMin = getDouble("temp_min")
         tempMax = getDouble("temp_max")
@@ -70,3 +79,54 @@ fun AmbientInfo.fromJsonObject(main: JSONObject) : AmbientInfo = with(main){
         humidity = getInt("humidity")
     }
 }
+
+/*
+ * See link below for data format
+ * http://api.openweathermap.org/data/2.5/forecast/daily?q=Lisboa&appid=64ebb6f1a2a7abf9c9a91fedf34426dd&cnt=5&lang=pt&units=metric
+ *
+ * Constructs a WeatherForecast object from a JSONObject
+ */
+fun WeatherForecast.fromJsonObject(forecast: JSONObject) : WeatherForecast{
+    return apply {
+        with(forecast){
+            val _city = getJSONObject("city")
+
+            val city = _city.getString("name")
+            val country = _city.getString("country")
+
+            val _forecasts = getJSONArray("list")
+            var i = 0
+            while(i < _forecasts.length()){
+                val wInfo = constructWeatherInfo(_forecasts.get(i) as JSONObject)
+                wInfo.city = city
+                wInfo.country = country
+
+                forecasts.add(wInfo)
+
+                i++
+            }
+        }
+    }
+}
+
+/**
+ * See data format in link below (look for field named list)
+ * Each item of that array is passed to this function
+ * http://api.openweathermap.org/data/2.5/forecast/daily?q=Lisboa&appid=64ebb6f1a2a7abf9c9a91fedf34426dd&cnt=5&lang=pt&units=metric
+ */
+private fun constructWeatherInfo(listItem: JSONObject) : WeatherInfo{
+    return WeatherInfo().fromJsonObject(listItem,
+            { // AmbientInfo supplier function
+                with(listItem.getJSONObject("temp")){
+                    AmbientInfo(
+                            getDouble("day"),
+                            getDouble("min"),
+                            getDouble("max"),
+                            listItem.getInt("pressure"),
+                            listItem.getInt("humidity")
+                    )
+                }
+            }
+    )
+}
+
