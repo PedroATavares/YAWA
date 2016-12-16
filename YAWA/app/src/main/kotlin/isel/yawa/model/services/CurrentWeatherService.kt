@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 class CurrentWeatherService : IntentService("fetch-thread"){
 
     companion object{
-        const val CITY_EXTRA_KEY = "city"
+        const val CITIES_EXTRA_KEY = "cities"
         const val MAX_WAIT_TIMEOUT_S : Long = 15
     }
 
@@ -32,22 +32,24 @@ class CurrentWeatherService : IntentService("fetch-thread"){
         if(workIntent == null)
             return
 
-        val city = workIntent.getStringExtra(CITY_EXTRA_KEY)
-        val url = buildWeatherQueryString(city)
+        val cities = workIntent.getStringArrayExtra(CITIES_EXTRA_KEY)
+        cities?.forEach {
+            val url = buildWeatherQueryString(it)
 
-        val future = RequestFuture.newFuture<JSONObject>()
-        val request = JsonObjectRequest(url, null, future, future)
+            val future = RequestFuture.newFuture<JSONObject>()
+            val request = JsonObjectRequest(url, null, future, future)
 
-        RequestManager.put(request)
-        try {
-            val response = future.get(MAX_WAIT_TIMEOUT_S, TimeUnit.SECONDS)
+            RequestManager.put(request)
+            try {
+                val response = future.get(MAX_WAIT_TIMEOUT_S, TimeUnit.SECONDS)
 
-            val wInfo = WeatherInfo().fromJsonObject(response)
-            
-            storeInContentProvider(wInfo)
-        } catch (t: Throwable) {
-            Log.e("SRV", "Failure upon trying to fetch current weather info for $city", t)
-            throw t;
+                val wInfo = WeatherInfo().fromJsonObject(response)
+
+                storeInContentProvider(wInfo)
+            } catch (t: Throwable) {
+                Log.e("SRV", "Failure upon trying to fetch current weather info for $it", t)
+                throw t;
+            }
         }
     }
 
