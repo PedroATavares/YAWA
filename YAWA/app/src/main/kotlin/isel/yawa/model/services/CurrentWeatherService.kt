@@ -13,6 +13,10 @@ import isel.yawa.model.content.fromJsonObject
 import isel.yawa.model.content.toContentValues
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
+
+const val CITIES_EXTRA_KEY = "cities"
+const val MAX_WAIT_TIMEOUT_S : Long = 15
 
 /**
  * Fetches current weather info from API and stores said info in a content provider
@@ -20,8 +24,7 @@ import java.util.concurrent.TimeUnit
 class CurrentWeatherService : IntentService("fetch-thread"){
 
     companion object{
-        const val CITIES_EXTRA_KEY = "cities"
-        const val MAX_WAIT_TIMEOUT_S : Long = 15
+        const val TAG = "W-SRV"
     }
 
     /**
@@ -32,7 +35,7 @@ class CurrentWeatherService : IntentService("fetch-thread"){
         if(workIntent == null)
             return
 
-        val cities = workIntent.getStringArrayExtra(CITIES_EXTRA_KEY)
+        val cities = workIntent.getStringArrayListExtra(CITIES_EXTRA_KEY)
         cities?.forEach {
             val url = buildWeatherQueryString(it)
 
@@ -42,16 +45,18 @@ class CurrentWeatherService : IntentService("fetch-thread"){
             RequestManager.put(request)
             try {
                 val response = future.get(MAX_WAIT_TIMEOUT_S, TimeUnit.SECONDS)
+                val wi = WeatherInfo().fromJsonObject(response)
+                storeInContentProvider(wi)
 
-                val wInfo = WeatherInfo().fromJsonObject(response)
-
-                storeInContentProvider(wInfo)
+            }catch (tm: TimeoutException){
+                Log.e(TAG, "Timeout exceeded when trying to fetch current weather info for $it", tm)
             } catch (t: Throwable) {
-                Log.e("SRV", "Failure upon trying to fetch current weather info for $it", t)
+                Log.e(TAG, "Failure upon trying to fetch weather current weather info for $it", t)
                 throw t;
             }
         }
     }
+
 
     private fun storeInContentProvider(weatherInfo : WeatherInfo){
         val mappedWeatherInfo = weatherInfo.toContentValues()
