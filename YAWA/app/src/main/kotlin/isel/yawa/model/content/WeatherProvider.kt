@@ -13,20 +13,24 @@ import android.support.annotation.MainThread
 
 /**
  * The provider for the local replica containing the weather information.
- * Sustained on an SQLite database with only one table.
+ * Sustained on an SQLite database with two tables to hold info about upcoming weather and about current weather.
  */
 class WeatherProvider : ContentProvider(){
 
     companion object {
         private const val DATABASE_NAME: String = "WEATHER_INFO_DATABASE"
         private const val WEATHER_TABLE_NAME = "WeatherInfo"
+        private const val FORECAST_TABLE_NAME = "Forecasts"
         private const val WEATHER_TABLE_CODE: Int = 1
-        private const val ROW_CONTENT_TYPE = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/movie"
+        private const val FORECAST_TABLE_CODE: Int = 2
+        private const val ROW_CONTENT_TYPE = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/weatherInfo"
 
         // Public interface
-        const val WEATHER_TABLE_PATH: String = "weather"
         const val AUTHORITY: String = "isel.yawa"
+        const val WEATHER_TABLE_PATH: String = "weather"
+        const val FORECAST_TABLE_PATH: String = "forecast"
         val WEATHER_CONTENT_URI : Uri = Uri.parse("content://$AUTHORITY/$WEATHER_TABLE_PATH")
+        val FORECAST_CONTENT_URI : Uri = Uri.parse("content://$AUTHORITY/$FORECAST_TABLE_PATH")
 
         // Column definitions (name, index)
         val COLUMN_DATE         = "DATE"
@@ -66,8 +70,8 @@ class WeatherProvider : ContentProvider(){
     private inner class WeatherInfoDbHelper(version: Int = 1, dbName: String = DATABASE_NAME) :
             SQLiteOpenHelper(this.context, dbName, null, version) {
 
-        private fun createTable(db: SQLiteDatabase?) {
-            val CREATE_CMD = "CREATE TABLE $WEATHER_TABLE_NAME ( " +
+        private fun createTable(db: SQLiteDatabase?, tableName: String) {
+            val CREATE_CMD = "CREATE TABLE $tableName ( " +
                     "$COLUMN_DATE INTEGER NOT NULL , " + // Unix time stamp
                     "$COLUMN_CITY TEXT NOT NULL , "+
                     "$COLUMN_COUNTRY COUNTRY , "+
@@ -86,14 +90,15 @@ class WeatherProvider : ContentProvider(){
             db?.execSQL(CREATE_CMD)
         }
 
-        private fun dropTable(db: SQLiteDatabase?) {
-            val DROP_CMD = "DROP TABLE IF EXISTS $WEATHER_TABLE_NAME"
+        private fun dropTable(db: SQLiteDatabase?, tableName: String) {
+            val DROP_CMD = "DROP TABLE IF EXISTS $tableName"
 
             db?.execSQL(DROP_CMD)
         }
 
         override fun onCreate(db: SQLiteDatabase?) {
-            createTable(db)
+            createTable(db, WEATHER_TABLE_NAME)
+            createTable(db, FORECAST_TABLE_NAME)
         }
 
         override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -101,8 +106,10 @@ class WeatherProvider : ContentProvider(){
              * I'm not sure how to proceed here so i will just go with this
              * Shouldn't be a big problem because the data stored in this db is not of vital importance
              */
-            dropTable(db)
-            createTable(db)
+            dropTable(db, WEATHER_TABLE_NAME)
+            dropTable(db, FORECAST_TABLE_NAME)
+            createTable(db, WEATHER_TABLE_NAME)
+            createTable(db, FORECAST_TABLE_NAME)
         }
     }
 
@@ -113,21 +120,21 @@ class WeatherProvider : ContentProvider(){
 
         with(uriMatcher){
             addURI(AUTHORITY, WEATHER_TABLE_PATH, WEATHER_TABLE_CODE)
+            addURI(AUTHORITY, FORECAST_TABLE_PATH, FORECAST_TABLE_CODE)
         }
 
         return true
     }
 
     override fun getType(uri: Uri): String? = when (uriMatcher.match(uri)) {
-        WEATHER_TABLE_CODE -> ROW_CONTENT_TYPE
+        WEATHER_TABLE_CODE, FORECAST_TABLE_CODE -> ROW_CONTENT_TYPE
         else -> throw IllegalArgumentException("Uri $uri not supported")
     }
 
-    private fun resolveTableFromUri(uri: Uri) : String{
-        if(uriMatcher.match(uri) == WEATHER_TABLE_CODE)
-            return WEATHER_TABLE_NAME
-
-        throw IllegalArgumentException("Uri $uri is not supported")
+    private fun resolveTableFromUri(uri: Uri) : String =  when(uriMatcher.match(uri)){
+            WEATHER_TABLE_CODE -> WEATHER_TABLE_NAME
+            FORECAST_TABLE_CODE -> FORECAST_TABLE_NAME
+            else -> throw IllegalArgumentException("Uri $uri is not supported")
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
