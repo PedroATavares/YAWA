@@ -44,3 +44,6 @@ fun Context.buildWeatherQueryString(city : String) =
 
 fun Context.buildForecastQueryString(city : String) =
         buildQueryString(city, resources.getString(R.string.api_forecast_endpoint))
+
+fun Context.buildDailyForecastQueryString(city : String) =
+        buildQueryString(city, resources.getString(R.string.api_daily_forecast_endpoint))+"&cnt=5"

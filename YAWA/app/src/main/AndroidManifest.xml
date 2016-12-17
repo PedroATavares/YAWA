@@ -34,6 +34,10 @@
         <service
             android:name=".model.services.CurrentWeatherService"
             android:exported="false"/>
+
+        <service
+            android:name=".model.services.ForecastFetchingService"
+            android:exported="false"/>
     </application>
 
 </manifest>
