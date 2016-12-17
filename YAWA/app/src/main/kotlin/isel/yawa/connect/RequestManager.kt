@@ -2,8 +2,10 @@ package isel.yawa.connect
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.LruCache
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.Volley
 import isel.yawa.R
 
@@ -15,9 +17,14 @@ import isel.yawa.R
 object RequestManager {
 
     private lateinit var requestQueue: RequestQueue
+    lateinit var imgLoader : ImageLoader
 
     fun setup(applicationContext: Context) {
         requestQueue = Volley.newRequestQueue(applicationContext)
+
+        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024)
+        val maxCacheSize = (maxMemory/ 8).toInt()
+        imgLoader = ImageLoader(requestQueue, LruImageCache(maxCacheSize))
     }
 
     fun <T> put(request: Request<T>) = requestQueue.add(request)

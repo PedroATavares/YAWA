@@ -2,7 +2,6 @@ package isel.yawa.model.services
 
 import android.app.IntentService
 import android.content.Intent
-import android.database.Cursor
 import android.util.Log
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.RequestFuture
