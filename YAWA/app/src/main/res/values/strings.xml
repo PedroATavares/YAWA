@@ -17,9 +17,9 @@
     <!-- API related -->
     <string name="api_key" translatable="false">appid=64ebb6f1a2a7abf9c9a91fedf34426dd</string>
     <string name="api_base_uri" translatable="false">http://api.openweathermap.org/data/2.5/</string>
-    <string name="api_weather_endpoint" translatable="false">weather/</string>
-    <string name="api_forecast_endpoint" translatable="false">forecast/</string>
-    <string name="api_daily_forecast_endpoint" translatable="false">forecast/daily/</string>
+    <string name="api_weather_endpoint" translatable="false">weather</string>
+    <string name="api_forecast_endpoint" translatable="false">forecast</string>
+    <string name="api_daily_forecast_endpoint" translatable="false">forecast/daily</string>
     <string name="api_image_endpoint" translatable="false">http://openweathermap.org/img/w/</string>
     <string name="api_lang">lang=en</string>
 

@@ -12,8 +12,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.util.*
 
-class SettingsActivity : AppCompatActivity() {
 
+const val SHARED_PREFERENCES_KEY ="userprefs"
+const val SHARED_PREFERENCES_CITIES ="cities"
+
+class SettingsActivity : AppCompatActivity() {
 
     //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
     var listItems:ArrayList<String>? = null
@@ -27,15 +30,15 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        val sharedPref = getSharedPreferences("userprefs", Context.MODE_PRIVATE);
+        val sharedPref = getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
         val editor = sharedPref.edit()
-        if(!sharedPref.contains("cities")) {
+        if(!sharedPref.contains(SHARED_PREFERENCES_CITIES)) {
             val set = HashSet<String>()
-            editor.putStringSet("cities", set)
+            editor.putStringSet(SHARED_PREFERENCES_CITIES, set)
             editor.apply()
         }
 
-        listItems = ArrayList<String>(sharedPref.getStringSet("cities",HashSet<String>()))
+        listItems = ArrayList<String>(sharedPref.getStringSet(SHARED_PREFERENCES_CITIES,HashSet<String>()))
 
         adapter = ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
@@ -47,7 +50,7 @@ class SettingsActivity : AppCompatActivity() {
             if(!editCity.text.isEmpty()) {
                 listItems!!.add(editCity.text.toString())
                 editCity.text.clear()
-                editor.putStringSet("cities", listItems!!.toSet())
+                editor.putStringSet(SHARED_PREFERENCES_CITIES, listItems!!.toSet())
                 editor.commit()
                 adapter!!.notifyDataSetChanged()
             }
@@ -68,7 +71,7 @@ class SettingsActivity : AppCompatActivity() {
             builder1.setCancelable(true)
             builder1.setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialogInterface, i ->
                 listItems!!.removeAt(idx)
-                editor.putStringSet("cities", listItems!!.toSet())
+                editor.putStringSet(SHARED_PREFERENCES_CITIES, listItems!!.toSet())
                 editor.commit()
                 adapter!!.notifyDataSetChanged()
             })

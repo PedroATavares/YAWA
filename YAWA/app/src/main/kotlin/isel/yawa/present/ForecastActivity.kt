@@ -1,6 +1,7 @@
 package isel.yawa.present
 
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -16,7 +17,9 @@ import isel.yawa.connect.DtoGetRequest
 import isel.yawa.connect.RequestManager
 import isel.yawa.model.CityForecast
 import isel.yawa.model.CityWeather
+import isel.yawa.model.content.WeatherProvider
 import kotlinx.android.synthetic.main.activity_forecast.*
+import java.util.*
 
 class ForecastActivity : AppCompatActivity() {
 
@@ -35,11 +38,68 @@ class ForecastActivity : AppCompatActivity() {
                 Pair(threedaysdesc, threedaysicon),
                 Pair(fourdaysdesc, fourdaysicon)
         )
+        val url = intent.extras.getString("url")
 
-        if(savedInstanceState == null) {
-            val url = intent.extras.getString("url")
-            getCityForecast(url)
+        with(WeatherProvider) {
+            val listList= ArrayList<CityForecast.List>()
+            val res = contentResolver.query(
+                    FORECAST_CONTENT_URI, null,
+                    "${WeatherProvider.COLUMN_CITY} = ? and $COLUMN_DATE > ?",
+                    arrayOf(url.substring(url.lastIndexOf('=') + 1, url.length), makeDate())
+                    , "$COLUMN_DATE asc")
+
+            if (res.moveToNext() && res.count >= 5) {
+                makeCityForecastFromCP(listList, res)
+            }else
+                if (savedInstanceState == null) {
+                    getCityForecast(url)
+                }
         }
+    }
+
+    private fun makeCityForecastFromCP(listList: ArrayList<CityForecast.List>, res: Cursor) {
+        with(WeatherProvider) {
+            var i = 0
+            while (i < 5) {
+                if (i++ != 0)
+                    res.moveToNext()
+
+                val weatherList = ArrayList<CityWeather.Weather>()
+                weatherList.add(CityWeather.Weather(
+                        res.getString(COLUMN_MAIN_IDX),
+                        res.getString(COLUMN_DESCRIPTION_IDX),
+                        res.getString(COLUMN_ICON_URL_IDX)
+                ))
+                listList.add(
+                        CityForecast.List(
+                                weatherList,
+                                CityForecast.Meteorology(
+                                        res.getLong(COLUMN_TEMP_IDX),
+                                        res.getLong(COLUMN_TEMP_MIN_IDX),
+                                        res.getLong(COLUMN_TEMP_MAX_IDX)
+                                ),
+                                res.getLong(COLUMN_PRESSURE_IDX),
+                                res.getLong(COLUMN_HUMIDITY_IDX)
+                        )
+                )
+            }
+            setListeners(
+                    CityForecast(
+                            CityForecast.City(res.getString(COLUMN_CITY_IDX)),
+                            listList
+                    )
+            )
+        }
+    }
+
+    private fun makeDate(): String {
+        val cal = Calendar.getInstance()
+        var time = cal.timeInMillis
+        time -=(cal.get(Calendar.HOUR_OF_DAY)*3600*1000)
+        time -=(cal.get(Calendar.MINUTE)*60*1000)
+        time -=(cal.get(Calendar.SECOND)*1000)
+        time /= 1000
+        return  time.toString()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -82,8 +142,8 @@ class ForecastActivity : AppCompatActivity() {
         cityTextForecast.text = city.city.name
 
         forecastSlots.forEachIndexed { i, pair ->
-            val weather = city.list.elementAt(i * 8).weather.elementAt(0)
-            val meter = city.list.elementAt(i * 8).main
+            val weather = city.list.elementAt(i).weather.elementAt(0)
+            val meter = city.list.elementAt(i).temp
 
             pair.first.text = "${getString(R.string.weather_forecast_description)} ${weather.description}"
 
@@ -94,7 +154,7 @@ class ForecastActivity : AppCompatActivity() {
         }
     }
 
-    private fun onItemClick(city: CityForecast, meter: CityWeather.Meteorology, weather: CityWeather.Weather) {
+    private fun onItemClick(city: CityForecast, meter: CityForecast.Meteorology, weather: CityWeather.Weather) {
         val myIntent = Intent(this, WeatherActivity::class.java)
 
         myIntent.putExtra("weather", weather)

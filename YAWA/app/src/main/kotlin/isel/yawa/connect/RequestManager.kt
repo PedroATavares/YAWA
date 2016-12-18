@@ -31,19 +31,19 @@ fun deviceHasConnection(ctx: Context) : Boolean {
 }
 
 // i love kotlin
-private fun  Context.buildQueryString(city: String, endPoint: String): String {
+private fun  Context.buildQueryString(city: String, endPoint: String, count:String): String {
     val api_base = resources.getString(R.string.api_base_uri)
     val api_key = resources.getString(R.string.api_key)
     val api_lang = resources.getString(R.string.api_lang)
 
-    return "$api_base$endPoint?$api_key&q=$city&$api_lang&units=metric"
+    return "$api_base$endPoint?$api_key&$api_lang&units=metric$count&q=$city"
 }
 
 fun Context.buildWeatherQueryString(city : String) =
-        buildQueryString(city, resources.getString(R.string.api_weather_endpoint))
+        buildQueryString(city, resources.getString(R.string.api_weather_endpoint),"")
 
 fun Context.buildForecastQueryString(city : String) =
-        buildQueryString(city, resources.getString(R.string.api_forecast_endpoint))
+        buildQueryString(city, resources.getString(R.string.api_forecast_endpoint),"")
 
 fun Context.buildDailyForecastQueryString(city : String) =
-        buildQueryString(city, resources.getString(R.string.api_daily_forecast_endpoint))+"&cnt=5"
+        buildQueryString(city, resources.getString(R.string.api_daily_forecast_endpoint),"&cnt=5")

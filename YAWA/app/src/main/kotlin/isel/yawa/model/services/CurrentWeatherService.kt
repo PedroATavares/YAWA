@@ -34,7 +34,7 @@ class CurrentWeatherService : IntentService("fetch-thread"){
     override fun onHandleIntent(workIntent: Intent?) {
         if(workIntent == null)
             return
-
+        System.out.println("----------------------------------- Service ----------------------------------")
         val cities = workIntent.getStringArrayListExtra(CITIES_EXTRA_KEY)
         cities?.forEach {
             val url = buildWeatherQueryString(it)
@@ -52,7 +52,8 @@ class CurrentWeatherService : IntentService("fetch-thread"){
                 Log.e(TAG, "Timeout exceeded when trying to fetch current weather info for $it", tm)
             } catch (t: Throwable) {
                 Log.e(TAG, "Failure upon trying to fetch weather current weather info for $it", t)
-                throw t;
+                Log.e(TAG, t.message)
+                throw t
             }
         }
     }
@@ -61,6 +62,13 @@ class CurrentWeatherService : IntentService("fetch-thread"){
     private fun storeInContentProvider(weatherInfo : WeatherInfo){
         val mappedWeatherInfo = weatherInfo.toContentValues()
 
-        contentResolver.insert(WeatherProvider.WEATHER_CONTENT_URI, mappedWeatherInfo)
+        with(WeatherProvider) {
+            val res = contentResolver.query(WEATHER_CONTENT_URI, arrayOf(COLUMN_CITY, COLUMN_DATE),
+                    "$COLUMN_CITY = ? and $COLUMN_DATE = ?",
+                    arrayOf(weatherInfo.city,weatherInfo.date.toString()),null)
+            System.out.println(weatherInfo.city)
+            if(!res.moveToNext())
+                contentResolver.insert(WEATHER_CONTENT_URI, mappedWeatherInfo)
+        }
     }
 }
