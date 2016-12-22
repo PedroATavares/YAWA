@@ -35,6 +35,16 @@
     <string name="weather_forecast_in_3_days">In 3 days</string>
     <string name="weather_forecast_in_4_days">In 4 days</string>
 
+    <!-- Settings Activity -->
+    <string name="UserPreferences" translatable="false">userprefs</string>
+    <string name="time_notify_minute" translatable="false">minute_notify</string>
+    <string name="time_notify_hour" translatable="false">hour_notify</string>
+    <string name="period_refresh" translatable="false">period</string>
+    <string name="favourite_city" translatable="false">city</string>
+    <string name="cities_to_Follow" translatable="false">cities</string>
+
+
+
     <!-- Credits Activty -->
     <string name="api_link" translatable="false">http://openweathermap.org</string>
     <string name="powered_by">Powered By</string>

@@ -34,10 +34,24 @@
         <service
             android:name=".model.services.CurrentWeatherService"
             android:exported="false"/>
-
         <service
             android:name=".model.services.ForecastFetchingService"
             android:exported="false"/>
+        <receiver android:name=".broadcastReceivers.Notification" />
+
+        <receiver android:name=".broadcastReceivers.AlarmsDeactivate">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_LOW">
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".broadcastReceivers.AlarmsRegister">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED">
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
