@@ -1,126 +1,120 @@
 package isel.yawa.present
 
+import android.content.AsyncQueryHandler
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import isel.yawa.R
-import isel.yawa.connect.DtoGetRequest
+import isel.yawa.connect.MappingRequest
 import isel.yawa.connect.RequestManager
-import isel.yawa.model.CityForecast
-import isel.yawa.model.CityWeather
+import isel.yawa.connect.buildWeatherQueryString
+import isel.yawa.model.WeatherInfo
 import isel.yawa.model.content.WeatherProvider
+import isel.yawa.model.content.fromCursor
+import isel.yawa.model.content.fromJsonObject
 import kotlinx.android.synthetic.main.activity_weather.*
 import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
 
+    companion object {
+        const val CITY_KEY: String = "city"
+        const val WEATHER_KEY: String = "weather"
+
+        private lateinit var queryHandler: AsyncQueryHandler
+        private lateinit var target: WeatherInfo
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_weather)
+        setupAsyncQueryHandler()
 
-        val weather = intent.extras.getParcelable<CityWeather.Weather>("weather")
-        val meter= intent.extras.getParcelable<CityForecast.Meteorology>("meter")
+        if(intent.extras.containsKey(WEATHER_KEY)){
+            val weather = intent.extras.getParcelable<WeatherInfo>(WEATHER_KEY)
 
-        if(weather !=null && meter!= null)
-        {
-            populateFromWeather(weather,meter,intent.extras.getString("city"))
+            target = weather
+            populateViewsFromWeather(weather)
 
-        }else if(savedInstanceState == null){
-                val url = intent.extras.getString("url")
+            return
+        }
 
-                with(WeatherProvider) {
-                    val res = contentResolver.query(WEATHER_CONTENT_URI, null,
-                            "${WeatherProvider.COLUMN_CITY} = ?",
-                            arrayOf(url.substring(url.lastIndexOf('=') + 1, url.length))
-                            , "$COLUMN_DATE desc")
+        val city = intent.extras.getString(CITY_KEY)
 
-                    if (res.moveToNext()) {
-                        res.use {
-                            populateFromWeather(
-                                    CityWeather.Weather(
-                                            res.getString(COLUMN_MAIN_IDX),
-                                            res.getString(COLUMN_DESCRIPTION_IDX),
-                                            res.getString(COLUMN_ICON_URL_IDX)),
-                                    CityForecast.Meteorology(
-                                            res.getLong(COLUMN_TEMP_IDX),
-                                            res.getLong(COLUMN_TEMP_MIN_IDX),
-                                            res.getLong(COLUMN_TEMP_MAX_IDX)
-                                            )
-                                    , res.getString(COLUMN_CITY_IDX))
-                        }
-                    }else
-                        getCurrentWeather(url)
+        with(WeatherProvider) {
+            queryHandler.startQuery(0, city,
+                    WEATHER_CONTENT_URI, null,
+                    "$COLUMN_CITY = ?",
+                    arrayOf(city),
+                    "$COLUMN_DATE desc")
+        }
+    }
+
+    private fun setupAsyncQueryHandler() {
+        queryHandler = object : AsyncQueryHandler(contentResolver) {
+            override fun onQueryComplete(token: Int, cookie: Any?, cursor: Cursor) {
+                if (!cursor.moveToNext()) {
+                    fetchCurrentWeather(intent.extras.getString(CITY_KEY))
+                    return
                 }
+
+                target = WeatherInfo().fromCursor(cursor)
+                populateViewsFromWeather(target)
+            }
         }
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        with(savedInstanceState){
-            populateViews(
-                    getString("cityText"),
-                    getString("weatherText"),
-                    getString("weatherDescText"),
-                    getString("medTemp")
-            )
-
-            val icon : Bitmap = getParcelable("icon")
-            iconView.setImageBitmap(icon)
-        }
-    }
-
-    private fun getCurrentWeather(url: String){
+    private fun fetchCurrentWeather(city: String){
         RequestManager.put(
-                DtoGetRequest(
-                        url,
-                        CityWeather::class.java,
-                        { city ->
-
-                            val weather = city.weather.elementAt(0)
-
-                            populateViews(
-                                    city.name,
-                                    weather.main,
-                                    weather.description,
-                                    city.main.temp.toString()
-                            )
-
-                            fetchAndShowIcon(weather.icon)
-                        },
+                MappingRequest(
+                        buildWeatherQueryString(city),
+                        { WeatherInfo().fromJsonObject(it) },
+                        { target = it; populateViewsFromWeather(it) },
                         { error ->
-                            Toast.makeText(this, R.string.get_current_weather_fail_message, Toast.LENGTH_SHORT).show()
+                            Log.e("ERROR", error.message)
                             throw error
                         }
                 )
         )
     }
 
-    private fun populateFromWeather(weather: CityWeather.Weather, meter: CityForecast.Meteorology, city:String){
-        populateViews(city,
-                weather.main,
-                weather.description,
-                meter.day.toString()
-                )
+    private fun populateViewsFromWeather(weather: WeatherInfo) {
+        with(weather){
+            cityName.text = city
+            dateField.text = Date(date!! * 1000).toString()
+            countryText.text = country
 
-        fetchAndShowIcon(weather.icon)
+            weatherText.text = main
+            weatherDescText.text = description
+
+            fun addUnit(temp: Double?) = "$temp ${resources.getString(R.string.weather_detail_unit)}"
+
+            with(ambientInfo!!){
+                medTemp.text = addUnit(temp)
+                minTemp.text = addUnit(tempMin)
+                maxTemp.text = addUnit(tempMax)
+
+                pressureTextView.text = String.format(resources.getString(R.string.weather_detail_pressure), pressure)
+                humidityTextView.text = String.format(resources.getString(R.string.weather_detail_humidity), humidity)
+            }
+
+            fetchAndShowIcon(icon_url) // TODO: fix running on UI thread
+        }
     }
 
-    private fun populateViews(cityName: String, _weatherText : String, _weatherDescText : String, _medTemp: String) {
-        cityText.text = cityName
-        weatherText.text = _weatherText
-        weatherDescText.text = _weatherDescText
-        medTemp.text= "${resources.getString(R.string.weather_detail_temp)} $_medTemp ${resources.getString(R.string.weather_detail_unit)}"
-
-    }
 
     private fun fetchAndShowIcon(icon: String?) {
+        fun  buildIconQueryUrl(icon: String?): String? {
+            return "${resources.getString(R.string.api_image_endpoint)}$icon.png"
+        }
+
         RequestManager.put(ImageRequest(
                 buildIconQueryUrl(icon),
                 Response.Listener<Bitmap> { bitmap -> iconView.setImageBitmap(bitmap) },
@@ -135,21 +129,16 @@ class WeatherActivity : AppCompatActivity() {
         )
     }
 
-    private fun  buildIconQueryUrl(icon: String?): String? {
-        return "${resources.getString(R.string.api_image_endpoint)}$icon.png"
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        target = savedInstanceState.getParcelable(WEATHER_KEY)
+        populateViewsFromWeather(target)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        with(outState){
-            putString("cityText", cityText.text.toString())
-            putString("weatherText", weatherText.text.toString())
-            putString("weatherDescText", weatherDescText.text.toString())
-            putString("medTemp", medTemp.text.toString())
-
-            val icon = (iconView.drawable as BitmapDrawable).bitmap
-            putParcelable("icon", icon) // TODO: this is expensive, find another solution
-        }
+        outState.putParcelable(WEATHER_KEY, target)
     }
 }

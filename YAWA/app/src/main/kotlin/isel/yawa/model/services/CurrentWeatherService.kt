@@ -34,7 +34,7 @@ class CurrentWeatherService : IntentService("fetch-thread"){
     override fun onHandleIntent(workIntent: Intent?) {
         if(workIntent == null)
             return
-        System.out.println("----------------------------------- Service ----------------------------------")
+
         val cities = workIntent.getStringArrayListExtra(CITIES_EXTRA_KEY)
         cities?.forEach {
             val url = buildWeatherQueryString(it)
@@ -63,12 +63,13 @@ class CurrentWeatherService : IntentService("fetch-thread"){
         val mappedWeatherInfo = weatherInfo.toContentValues()
 
         with(WeatherProvider) {
-            val res = contentResolver.query(WEATHER_CONTENT_URI, arrayOf(COLUMN_CITY, COLUMN_DATE),
+            contentResolver.query(WEATHER_CONTENT_URI, arrayOf(COLUMN_CITY, COLUMN_DATE),
                     "$COLUMN_CITY = ? and $COLUMN_DATE = ?",
-                    arrayOf(weatherInfo.city,weatherInfo.date.toString()),null)
-            System.out.println(weatherInfo.city)
-            if(!res.moveToNext())
-                contentResolver.insert(WEATHER_CONTENT_URI, mappedWeatherInfo)
+                    arrayOf(weatherInfo.city, weatherInfo.date.toString()), null
+            ).use {
+                if(!it.moveToNext())
+                    contentResolver.insert(WEATHER_CONTENT_URI, mappedWeatherInfo)
+            }
         }
     }
 }

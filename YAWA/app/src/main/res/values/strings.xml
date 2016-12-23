@@ -25,6 +25,8 @@
 
     <!-- Weather detail activity -->
     <string name="weather_detail_temp">Temperature: </string>
+    <string name="weather_detail_pressure">Pressure: %d</string>
+    <string name="weather_detail_humidity">Humidity: %d</string>
     <string name="weather_detail_unit" translatable="false">ºC</string>
 
     <!-- Forecast Activity -->

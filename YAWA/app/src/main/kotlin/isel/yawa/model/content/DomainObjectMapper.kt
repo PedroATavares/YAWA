@@ -1,6 +1,7 @@
 package isel.yawa.model.content
 
 import android.content.ContentValues
+import android.database.Cursor
 import isel.yawa.model.AmbientInfo
 import isel.yawa.model.WeatherForecast
 import isel.yawa.model.WeatherInfo
@@ -130,3 +131,29 @@ private fun constructWeatherInfo(listItem: JSONObject) : WeatherInfo{
     )
 }
 
+fun WeatherInfo.fromCursor(c : Cursor): WeatherInfo {
+    with(WeatherProvider){
+        date = c.getLong(COLUMN_DATE_IDX)
+        city = c.getString(COLUMN_CITY_IDX)
+        country = c.getString(COLUMN_COUNTRY_IDX)
+        main = c.getString(COLUMN_MAIN_IDX )
+        description = c.getString(COLUMN_DESCRIPTION_IDX)
+
+        ambientInfo = AmbientInfo().fromCursor(c)
+        icon_url = c.getString(COLUMN_ICON_URL_IDX)
+    }
+
+    return this
+}
+
+fun AmbientInfo.fromCursor(c : Cursor): AmbientInfo {
+    with(WeatherProvider) {
+        temp = c.getDouble(COLUMN_TEMP_IDX)
+        tempMin = c.getDouble(COLUMN_TEMP_MIN_IDX)
+        tempMax = c.getDouble(COLUMN_TEMP_MAX_IDX)
+        pressure = c.getInt(COLUMN_PRESSURE_IDX)
+        humidity = c.getInt(COLUMN_HUMIDITY_IDX)
+    }
+
+    return this
+}

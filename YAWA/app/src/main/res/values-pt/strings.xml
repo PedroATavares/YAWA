@@ -19,4 +19,6 @@
     <string name="weather_forecast_today">Hoje</string>
     <string name="weather_forecast_tomorrow">Amanhã</string>
     <string name="powered_by">Patrocinado por</string>
+    <string name="weather_detail_humidity" translatable="false">Humidade: %d</string>
+    <string name="weather_detail_pressure">Pressão: %d</string>
 </resources>

@@ -22,8 +22,8 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:id="@+id/cityText"
-            android:layout_weight="1"
+            android:id="@+id/cityName"
+            android:layout_weight="0.78"
             android:textColorHighlight="@android:color/holo_orange_dark"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textAlignment="center"
@@ -45,7 +45,27 @@
         android:layout_alignParentStart="true"
         android:id="@+id/details">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/header">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/dateField"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="94dp"
+                android:layout_height="match_parent"
+                android:id="@+id/countryText" />
+
+        </LinearLayout>
+
         <TextView
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/weatherText"
@@ -55,19 +75,18 @@
             android:layout_marginTop="23dp" />
 
         <TextView
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:id="@+id/weatherDescText"
             android:layout_weight="0.00"
             android:textSize="20sp"
             android:textColor="@android:color/darker_gray"
             android:textColorHighlight="@android:color/holo_orange_dark"
-            tools:ignore="ObsoleteLayoutParam"
-            android:layout_below="@+id/weatherText"
-            android:layout_alignParentStart="true"
             android:layout_marginTop="19dp" />
 
         <TextView
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/medTemp"
@@ -75,10 +94,35 @@
             android:textSize="20sp"
             android:textColor="@android:color/darker_gray"
             android:textColorHighlight="@android:color/holo_orange_dark"
-            tools:ignore="ObsoleteLayoutParam"
-            android:layout_below="@+id/weatherText"
-            android:layout_alignParentStart="true"
             android:layout_marginTop="19dp"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/minTemp"
+            android:layout_weight="0.00"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/maxTemp"
+            android:layout_weight="0.00"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pressureTextView" />
+
+        <TextView
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/humidityTextView" />
 
     </LinearLayout>
 
