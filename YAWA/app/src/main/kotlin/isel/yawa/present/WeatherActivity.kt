@@ -11,8 +11,11 @@ import com.android.volley.toolbox.ImageRequest
 import isel.yawa.R
 import isel.yawa.connect.DtoGetRequest
 import isel.yawa.connect.RequestManager
+import isel.yawa.model.CityForecast
 import isel.yawa.model.CityWeather
+import isel.yawa.model.content.WeatherProvider
 import kotlinx.android.synthetic.main.activity_weather.*
+import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
 
@@ -22,14 +25,36 @@ class WeatherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_weather)
 
         val weather = intent.extras.getParcelable<CityWeather.Weather>("weather")
-        val meter= intent.extras.getParcelable<CityWeather.Meteorology>("meter")
+        val meter= intent.extras.getParcelable<CityForecast.Meteorology>("meter")
 
         if(weather !=null && meter!= null)
         {
-            populateFromWeather(weather,meter)
-        }else if(savedInstanceState == null){
+            populateFromWeather(weather,meter,intent.extras.getString("city"))
+
+        }else
+            if(savedInstanceState == null){
                 val url = intent.extras.getString("url")
-                getCurrentWeather(url)
+
+                with(WeatherProvider) {
+                    val res = contentResolver.query(WEATHER_CONTENT_URI, null,
+                            "${WeatherProvider.COLUMN_CITY} = ?",
+                            arrayOf(url.substring(url.lastIndexOf('=') + 1, url.length))
+                            , "$COLUMN_DATE desc")
+
+                    if (res.moveToNext()) {
+                        populateFromWeather(
+                                CityWeather.Weather(
+                                        res.getString(COLUMN_MAIN_IDX),
+                                        res.getString(COLUMN_DESCRIPTION_IDX),
+                                        res.getString(COLUMN_ICON_URL_IDX)),
+                                CityForecast.Meteorology(
+                                        res.getLong(COLUMN_TEMP_IDX),
+                                        res.getLong(COLUMN_TEMP_MIN_IDX),
+                                        res.getLong(COLUMN_TEMP_MAX_IDX)
+                                        )
+                                , res.getString(COLUMN_CITY_IDX))
+                    }else getCurrentWeather(url)
+                }
             }
     }
 
@@ -75,11 +100,11 @@ class WeatherActivity : AppCompatActivity() {
         )
     }
 
-    private fun populateFromWeather(weather: CityWeather.Weather, meter: CityWeather.Meteorology){
-        populateViews(intent.extras.getString("city"),
+    private fun populateFromWeather(weather: CityWeather.Weather, meter: CityForecast.Meteorology, city:String){
+        populateViews(city,
                 weather.main,
                 weather.description,
-                meter.temp.toString()
+                meter.day.toString()
                 )
 
         fetchAndShowIcon(weather.icon)

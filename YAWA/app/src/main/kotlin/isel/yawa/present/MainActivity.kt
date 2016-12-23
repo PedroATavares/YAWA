@@ -1,5 +1,8 @@
 package isel.yawa.present
 
+import android.content.Context
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -7,17 +10,21 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import isel.yawa.R
-import isel.yawa.connect.buildForecastQueryString
+import isel.yawa.connect.buildDailyForecastQueryString
 import isel.yawa.connect.buildWeatherQueryString
 import isel.yawa.connect.deviceHasConnection
+import isel.yawa.model.services.CITIES_EXTRA_KEY
+import isel.yawa.model.services.ForecastFetchingService
+import isel.yawa.model.services.CurrentWeatherService
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        
         creditsButton.setOnClickListener{
             startActivity(Intent(this, CreditsActivity::class.java));
         }
@@ -66,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getForecastForCity(city : String) {
         startActivity(Intent(this, ForecastActivity::class.java).apply {
-            val qString : String = buildForecastQueryString(city)
+            val qString : String = buildDailyForecastQueryString(city)
             putExtra("url", qString)
         })
     }

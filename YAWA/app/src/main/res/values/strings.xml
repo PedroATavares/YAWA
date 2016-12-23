@@ -17,9 +17,9 @@
     <!-- API related -->
     <string name="api_key" translatable="false">appid=64ebb6f1a2a7abf9c9a91fedf34426dd</string>
     <string name="api_base_uri" translatable="false">http://api.openweathermap.org/data/2.5/</string>
-    <string name="api_weather_endpoint" translatable="false">weather/</string>
-    <string name="api_forecast_endpoint" translatable="false">forecast/</string>
-    <string name="api_daily_forecast_endpoint" translatable="false">forecast/daily/</string>
+    <string name="api_weather_endpoint" translatable="false">weather</string>
+    <string name="api_forecast_endpoint" translatable="false">forecast</string>
+    <string name="api_daily_forecast_endpoint" translatable="false">forecast/daily</string>
     <string name="api_image_endpoint" translatable="false">http://openweathermap.org/img/w/</string>
     <string name="api_lang">lang=en</string>
 
@@ -34,6 +34,16 @@
     <string name="weather_forecast_in_2_days">In 2 days</string>
     <string name="weather_forecast_in_3_days">In 3 days</string>
     <string name="weather_forecast_in_4_days">In 4 days</string>
+
+    <!-- Settings Activity -->
+    <string name="UserPreferences" translatable="false">userprefs</string>
+    <string name="time_notify_minute" translatable="false">minute_notify</string>
+    <string name="time_notify_hour" translatable="false">hour_notify</string>
+    <string name="period_refresh" translatable="false">period</string>
+    <string name="favourite_city" translatable="false">city</string>
+    <string name="cities_to_Follow" translatable="false">cities</string>
+
+
 
     <!-- Credits Activty -->
     <string name="api_link" translatable="false">http://openweathermap.org</string>

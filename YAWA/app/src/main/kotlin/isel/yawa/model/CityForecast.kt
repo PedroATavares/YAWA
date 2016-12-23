@@ -35,7 +35,9 @@ data class CityForecast(var city:City, val list: kotlin.collections.List<List>) 
 
 
     data class List(val weather: kotlin.collections.List<CityWeather.Weather>,
-                    var main: CityWeather.Meteorology) : Parcelable {
+                    var temp: Meteorology,
+                    var pressure:Long,
+                    var humidity:Long) : Parcelable {
 
         companion object {
             @JvmField @Suppress("unused")
@@ -50,18 +52,20 @@ data class CityForecast(var city:City, val list: kotlin.collections.List<List>) 
         override fun writeToParcel(out: Parcel, flags: Int) {
             out.apply {
                 writeList(weather)
-                writeParcelable(main,flags)
+                writeParcelable(temp,flags)
+                writeLong(pressure)
+                writeLong(humidity)
             }
         }
 
         constructor(source: Parcel) : this() {
             source.readList(weather,ClassLoader.getSystemClassLoader())
-            main = source.readParcelable<CityWeather.Meteorology>(ClassLoader.getSystemClassLoader())
+            temp = source.readParcelable<Meteorology>(ClassLoader.getSystemClassLoader())
 
         }
 
         @Suppress("unused")
-        constructor() : this(Collections.emptyList(), CityWeather.Meteorology())
+        constructor() : this(Collections.emptyList(), Meteorology(),0,0)
     }
 
     data class City(val name: String) : Parcelable {
@@ -88,5 +92,38 @@ data class CityForecast(var city:City, val list: kotlin.collections.List<List>) 
 
 
         constructor() : this("")
+    }
+
+    data class Meteorology(val day: Long,
+                           val min: Long,
+                           val max : Long): Parcelable{
+
+
+        companion object {
+            @JvmField @Suppress("unused")
+            val CREATOR = object : Parcelable.Creator<Meteorology> {
+                override fun createFromParcel(source: Parcel) = Meteorology(source)
+                override fun newArray(size: Int): Array<Meteorology?> = arrayOfNulls(size)
+            }
+        }
+
+        override fun describeContents(): Int =0
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            out.apply {
+                writeLong(day)
+                writeLong(min)
+                writeLong(max)
+            }
+        }
+
+        constructor(source :Parcel ): this(
+                day = source.readLong(),
+                min = source.readLong(),
+                max = source.readLong()
+        )
+
+        constructor() : this(0,0,0)
+
     }
 }
