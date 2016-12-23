@@ -31,8 +31,7 @@ class WeatherActivity : AppCompatActivity() {
         {
             populateFromWeather(weather,meter,intent.extras.getString("city"))
 
-        }else
-            if(savedInstanceState == null){
+        }else if(savedInstanceState == null){
                 val url = intent.extras.getString("url")
 
                 with(WeatherProvider) {
@@ -42,20 +41,23 @@ class WeatherActivity : AppCompatActivity() {
                             , "$COLUMN_DATE desc")
 
                     if (res.moveToNext()) {
-                        populateFromWeather(
-                                CityWeather.Weather(
-                                        res.getString(COLUMN_MAIN_IDX),
-                                        res.getString(COLUMN_DESCRIPTION_IDX),
-                                        res.getString(COLUMN_ICON_URL_IDX)),
-                                CityForecast.Meteorology(
-                                        res.getLong(COLUMN_TEMP_IDX),
-                                        res.getLong(COLUMN_TEMP_MIN_IDX),
-                                        res.getLong(COLUMN_TEMP_MAX_IDX)
-                                        )
-                                , res.getString(COLUMN_CITY_IDX))
-                    }else getCurrentWeather(url)
+                        res.use {
+                            populateFromWeather(
+                                    CityWeather.Weather(
+                                            res.getString(COLUMN_MAIN_IDX),
+                                            res.getString(COLUMN_DESCRIPTION_IDX),
+                                            res.getString(COLUMN_ICON_URL_IDX)),
+                                    CityForecast.Meteorology(
+                                            res.getLong(COLUMN_TEMP_IDX),
+                                            res.getLong(COLUMN_TEMP_MIN_IDX),
+                                            res.getLong(COLUMN_TEMP_MAX_IDX)
+                                            )
+                                    , res.getString(COLUMN_CITY_IDX))
+                        }
+                    }else
+                        getCurrentWeather(url)
                 }
-            }
+        }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
