@@ -3,16 +3,11 @@ package isel.yawa.present
 import android.content.AsyncQueryHandler
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import com.android.volley.Response
-import com.android.volley.toolbox.ImageRequest
+import com.android.volley.toolbox.NetworkImageView
 import isel.yawa.Application.Companion.CITY_KEY
 import isel.yawa.R
 import isel.yawa.connect.MappingRequest
@@ -31,7 +26,7 @@ class ForecastActivity : AppCompatActivity() {
         const val FORECAST_KEY: String = "forecast"
         const val FORECAST_LENGTH = 5
 
-        private lateinit var forecastSlots : Array<Pair<TextView, ImageView>>
+        private lateinit var forecastSlots : Array<Pair<TextView, NetworkImageView>>
         private lateinit var queryHandler: AsyncQueryHandler
         private lateinit var target: WeatherForecast
     }
@@ -120,21 +115,9 @@ class ForecastActivity : AppCompatActivity() {
         })
     }
 
-    private fun fetchAndShowIcon(iconStr: String?, icon: ImageView) {
+    private fun fetchAndShowIcon(iconStr: String?, icon: NetworkImageView) {
         val url = "${getString(R.string.api_image_endpoint)}$iconStr.png"
-
-        RequestManager.put(ImageRequest(
-                url,
-                Response.Listener<Bitmap> { response -> icon.setImageBitmap(response) },
-                0,
-                0,
-                icon.scaleType,
-                Bitmap.Config.ARGB_8888,
-                Response.ErrorListener { error ->
-                    icon.setBackgroundColor(Color.parseColor("#ff0000"))
-                    Toast.makeText(this, R.string.icon_fetch_failed_message, Toast.LENGTH_SHORT).show()
-                })
-        )
+        RequestManager.fetchImageAndDisplay(url, icon)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
