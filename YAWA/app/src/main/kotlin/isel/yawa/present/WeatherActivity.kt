@@ -10,21 +10,21 @@ import android.util.Log
 import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
+import isel.yawa.Application.Companion.CITY_KEY
 import isel.yawa.R
 import isel.yawa.connect.MappingRequest
 import isel.yawa.connect.RequestManager
 import isel.yawa.connect.buildWeatherQueryString
 import isel.yawa.model.WeatherInfo
 import isel.yawa.model.content.WeatherProvider
-import isel.yawa.model.content.fromCursor
 import isel.yawa.model.content.fromJsonObject
+import isel.yawa.model.content.toWeatherInfo
 import kotlinx.android.synthetic.main.activity_weather.*
 import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
 
     companion object {
-        const val CITY_KEY: String = "city"
         const val WEATHER_KEY: String = "weather"
 
         private lateinit var queryHandler: AsyncQueryHandler
@@ -39,15 +39,16 @@ class WeatherActivity : AppCompatActivity() {
 
         if(intent.extras.containsKey(WEATHER_KEY)){
             val weather = intent.extras.getParcelable<WeatherInfo>(WEATHER_KEY)
+            restoreViewState(weather)
+            return
+        }
 
-            target = weather
-            populateViewsFromWeather(weather)
-
+        if(savedInstanceState != null && savedInstanceState.containsKey(WEATHER_KEY)){
+            restoreViewState(savedInstanceState.getParcelable(WEATHER_KEY))
             return
         }
 
         val city = intent.extras.getString(CITY_KEY)
-
         with(WeatherProvider) {
             queryHandler.startQuery(0, city,
                     WEATHER_CONTENT_URI, null,
@@ -65,8 +66,8 @@ class WeatherActivity : AppCompatActivity() {
                     return
                 }
 
-                target = WeatherInfo().fromCursor(cursor)
-                populateViewsFromWeather(target)
+                val wInfo = cursor.toWeatherInfo()
+                restoreViewState(wInfo)
             }
         }
     }
@@ -76,13 +77,18 @@ class WeatherActivity : AppCompatActivity() {
                 MappingRequest(
                         buildWeatherQueryString(city),
                         { WeatherInfo().fromJsonObject(it) },
-                        { target = it; populateViewsFromWeather(it) },
+                        { restoreViewState(it) },
                         { error ->
                             Log.e("ERROR", error.message)
                             throw error
                         }
                 )
         )
+    }
+
+    private fun restoreViewState(info: WeatherInfo){
+        target = info
+        populateViewsFromWeather(info)
     }
 
     private fun populateViewsFromWeather(weather: WeatherInfo) {
@@ -108,7 +114,6 @@ class WeatherActivity : AppCompatActivity() {
             fetchAndShowIcon(icon_url) // TODO: fix running on UI thread
         }
     }
-
 
     private fun fetchAndShowIcon(icon: String?) {
         fun  buildIconQueryUrl(icon: String?): String? {

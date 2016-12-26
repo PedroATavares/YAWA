@@ -2,7 +2,6 @@ package isel.yawa
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import isel.yawa.connect.RequestManager
@@ -10,9 +9,11 @@ import isel.yawa.model.services.CurrentWeatherService
 import isel.yawa.broadcastReceivers.Notification
 import java.util.*
 
-
-
 class Application : android.app.Application() {
+
+    companion object {
+        const val CITY_KEY: String = "city"
+    }
 
     override fun onCreate() {
         super.onCreate()
