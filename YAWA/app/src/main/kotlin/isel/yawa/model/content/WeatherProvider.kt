@@ -67,7 +67,7 @@ class WeatherProvider : ContentProvider(){
     /**
      * The associated helper for DB accesses and migration.
      */
-    private inner class WeatherInfoDbHelper(version: Int = 1, dbName: String = DATABASE_NAME) :
+    public inner class WeatherInfoDbHelper(version: Int = 2, dbName: String = DATABASE_NAME) :
             SQLiteOpenHelper(this.context, dbName, null, version) {
 
         private fun createTable(db: SQLiteDatabase?, tableName: String) {
