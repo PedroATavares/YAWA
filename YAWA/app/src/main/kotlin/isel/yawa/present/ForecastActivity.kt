@@ -1,31 +1,40 @@
 package isel.yawa.present
 
+import android.content.AsyncQueryHandler
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
+import isel.yawa.Application.Companion.CITY_KEY
 import isel.yawa.R
-import isel.yawa.connect.DtoGetRequest
+import isel.yawa.connect.MappingRequest
 import isel.yawa.connect.RequestManager
-import isel.yawa.model.CityForecast
-import isel.yawa.model.CityWeather
+import isel.yawa.connect.buildDailyForecastQueryString
+import isel.yawa.model.WeatherForecast
+import isel.yawa.model.WeatherInfo
 import isel.yawa.model.content.WeatherProvider
+import isel.yawa.model.content.fromJsonObject
+import isel.yawa.model.content.toWeatherForecast
 import kotlinx.android.synthetic.main.activity_forecast.*
-import java.util.*
 
 class ForecastActivity : AppCompatActivity() {
 
-    private lateinit  var forecastSlots : Array<Pair<TextView, ImageView>>
-    private var cityForecast: CityForecast =CityForecast()
+    companion object {
+        const val FORECAST_KEY: String = "forecast"
+        const val FORECAST_LENGTH = 5
 
+        private lateinit var forecastSlots : Array<Pair<TextView, ImageView>>
+        private lateinit var queryHandler: AsyncQueryHandler
+        private lateinit var target: WeatherForecast
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,130 +47,77 @@ class ForecastActivity : AppCompatActivity() {
                 Pair(threedaysdesc, threedaysicon),
                 Pair(fourdaysdesc, fourdaysicon)
         )
-        val url = intent.extras.getString("url")
 
-        with(WeatherProvider) {
-            val listList= ArrayList<CityForecast.List>()
-            val res = contentResolver.query(
-                    FORECAST_CONTENT_URI, null,
-                    "${WeatherProvider.COLUMN_CITY} = ? and $COLUMN_DATE > ?",
-                    arrayOf(url.substring(url.lastIndexOf('=') + 1, url.length), makeDate())
-                    , "$COLUMN_DATE asc")
+        setupAsyncQueryHandler()
 
-            if (res.moveToNext() && res.count >= 5) {
-                makeCityForecastFromCP(listList, res)
-            }else
-                if (savedInstanceState == null) {
-                    getCityForecast(url)
+        if(savedInstanceState != null && savedInstanceState.containsKey(FORECAST_KEY)){
+            restoreViewState(savedInstanceState.getParcelable(FORECAST_KEY))
+            return
+        }
+
+        if(intent.extras.containsKey(CITY_KEY))
+            queryContentProvider(intent.extras.getString(CITY_KEY))
+    }
+
+    private fun setupAsyncQueryHandler() {
+        queryHandler = object : AsyncQueryHandler(contentResolver) {
+            override fun onQueryComplete(token: Int, cookie: Any?, cursor: Cursor) {
+                if (!cursor.moveToNext() && cursor.count < FORECAST_LENGTH) {
+                    val city = cookie as String
+                    fetchCityForecast(city)
+                    return
                 }
+
+                val forecast = cursor.toWeatherForecast(FORECAST_LENGTH)
+                restoreViewState(forecast)
+            }
         }
     }
 
-    private fun makeCityForecastFromCP(listList: ArrayList<CityForecast.List>, res: Cursor) {
+    private fun queryContentProvider(city: String) {
         with(WeatherProvider) {
-            var i = 0
-            while (i < 5) {
-                if (i++ != 0)
-                    res.moveToNext()
-
-                val weatherList = ArrayList<CityWeather.Weather>()
-                weatherList.add(CityWeather.Weather(
-                        res.getString(COLUMN_MAIN_IDX),
-                        res.getString(COLUMN_DESCRIPTION_IDX),
-                        res.getString(COLUMN_ICON_URL_IDX)
-                ))
-                listList.add(
-                        CityForecast.List(
-                                weatherList,
-                                CityForecast.Meteorology(
-                                        res.getLong(COLUMN_TEMP_IDX),
-                                        res.getLong(COLUMN_TEMP_MIN_IDX),
-                                        res.getLong(COLUMN_TEMP_MAX_IDX)
-                                ),
-                                res.getLong(COLUMN_PRESSURE_IDX),
-                                res.getLong(COLUMN_HUMIDITY_IDX)
-                        )
-                )
-            }
-            setListeners(
-                    CityForecast(
-                            CityForecast.City(res.getString(COLUMN_CITY_IDX)),
-                            listList
-                    )
-            )
+            queryHandler.startQuery(0, city,
+                    FORECAST_CONTENT_URI, null,
+                    "$COLUMN_CITY = ?",
+                    arrayOf(city),
+                    "$COLUMN_DATE asc")
         }
     }
 
-    private fun makeDate(): String {
-        val cal = Calendar.getInstance()
-        var time = cal.timeInMillis
-        time -=(cal.get(Calendar.HOUR_OF_DAY)*3600*1000)
-        time -=(cal.get(Calendar.MINUTE)*60*1000)
-        time -=(cal.get(Calendar.SECOND)*1000)
-        time /= 1000
-        return  time.toString()
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        with(savedInstanceState){
-            cityTextForecast.text = getString("cityTextForecast")
-            cityForecast=getParcelable<CityForecast>("city")
-            
-            setListeners(cityForecast)
-
-            forecastSlots.forEachIndexed { i, pair ->
-                pair.first.text = getString("textView$i")
-
-                pair.second.setImageBitmap(getParcelable("icon$i"))
-            }
-        }
-    }
-
-    private fun getCityForecast(url: String){
+    private fun fetchCityForecast(city: String){
         RequestManager.put(
-                DtoGetRequest(
-                        url,
-                        CityForecast::class.java,
-                        { city ->
-
-                            cityForecast=city
-
-                            setListeners(city)
-                        },
+                MappingRequest(
+                        buildDailyForecastQueryString(city),
+                        { WeatherForecast().fromJsonObject(it) },
+                        { restoreViewState(it) },
                         { error ->
-                            Toast.makeText(this, R.string.get_forecast_fail_message, Toast.LENGTH_SHORT).show()
+                            Log.e("ERROR", error.message)
                             throw error
                         }
                 )
         )
     }
 
-    private fun setListeners(city: CityForecast) {
-        cityTextForecast.text = city.city.name
+    private fun restoreViewState(forecast: WeatherForecast) {
+        target = forecast
+
+        cityTextForecast.text = forecast.cityName
 
         forecastSlots.forEachIndexed { i, pair ->
-            val weather = city.list.elementAt(i).weather.elementAt(0)
-            val meter = city.list.elementAt(i).temp
+            val wInfo = forecast[i]!!
 
-            pair.first.text = "${getString(R.string.weather_forecast_description)} ${weather.description}"
+            pair.first.text = wInfo.description
+            fetchAndShowIcon(wInfo.icon_url, pair.second)
 
-            pair.first.setOnClickListener { onItemClick(city, meter, weather) }
-            pair.second.setOnClickListener { onItemClick(city, meter, weather) }
-
-            fetchAndShowIcon(weather.icon, pair.second)
+            pair.first.setOnClickListener { onItemClick(wInfo) }
+            pair.second.setOnClickListener { onItemClick(wInfo) }
         }
     }
 
-    private fun onItemClick(city: CityForecast, meter: CityForecast.Meteorology, weather: CityWeather.Weather) {
-        val myIntent = Intent(this, WeatherActivity::class.java)
-
-        myIntent.putExtra("weather", weather)
-        myIntent.putExtra("city", city.city.name)
-        myIntent.putExtra("meter", meter)
-
-        startActivity(myIntent)
+    private fun onItemClick(info: WeatherInfo) {
+        startActivity(Intent(this, WeatherActivity::class.java).apply {
+            putExtra(WeatherActivity.WEATHER_KEY, info)
+        })
     }
 
     private fun fetchAndShowIcon(iconStr: String?, icon: ImageView) {
@@ -184,17 +140,6 @@ class ForecastActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        with(outState){
-            putString("cityTextForecast", cityTextForecast.text.toString())
-            putParcelable("city", cityForecast)
-            forecastSlots.forEachIndexed { i, pair ->
-                putString("textView$i", pair.first.text.toString())
-
-                // TODO: change way to pass icons, very poor efficiency
-                // how to store icon efficiently?
-                val icon = (pair.second.drawable as BitmapDrawable).bitmap
-                putParcelable("icon$i", icon)
-            }
-        }
+        outState.putParcelable(FORECAST_KEY, target)
     }
 }

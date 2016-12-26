@@ -2,6 +2,7 @@ package isel.yawa.connect
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.util.LruCache
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -43,7 +44,7 @@ private fun  Context.buildQueryString(city: String, endPoint: String): String {
     val api_key = resources.getString(R.string.api_key)
     val api_lang = resources.getString(R.string.api_lang)
 
-    return "$api_base$endPoint?$api_key&$api_lang&units=metric&q=$city"
+    return "$api_base$endPoint?$api_key&$api_lang&units=metric&q=${Uri.encode(city)}"
 }
 
 fun Context.buildWeatherQueryString(city : String) =
