@@ -7,8 +7,8 @@ import android.os.Parcelable
  * Represents a list of WeatherInfo objects which in turn represent forecasts for a given day and city
  */
 data class WeatherForecast(
-    val forecasts: MutableList<WeatherInfo> = mutableListOf<WeatherInfo>()
-) : Parcelable{
+    private val forecasts: MutableList<WeatherInfo> = mutableListOf<WeatherInfo>()
+) : Parcelable {
 
     companion object {
         @JvmField
@@ -31,5 +31,14 @@ data class WeatherForecast(
     }
 
     override fun describeContents() = 0
+
+    fun addWeatherInfo(forecast : WeatherInfo) = forecasts.add(forecast)
+
+    fun  getForecastsThat(predicate: (WeatherInfo) -> Boolean) = forecasts.filter(predicate)
+
+    operator fun  get(i: Int): WeatherInfo? = forecasts[i]
+
+    val cityName: String?
+        get() = forecasts.firstOrNull()?.city
 
 }

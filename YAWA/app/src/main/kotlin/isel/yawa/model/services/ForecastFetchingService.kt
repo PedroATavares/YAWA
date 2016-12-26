@@ -49,9 +49,8 @@ class ForecastFetchingService : IntentService("forecast-fetcher") {
     }
 
     private fun  storeInContentProvider(wf: WeatherForecast) {
-        wf.forecasts.filter { // avoid duplicating info
-            !alreadyExists(it)
-        }.forEach {
+        wf.getForecastsThat { ! alreadyExists(it) }
+        .forEach {
             contentResolver.insert(WeatherProvider.FORECAST_CONTENT_URI, it.toContentValues())
         }
     }

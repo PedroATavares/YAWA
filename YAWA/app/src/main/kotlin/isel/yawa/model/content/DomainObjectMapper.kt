@@ -102,8 +102,7 @@ fun WeatherForecast.fromJsonObject(forecast: JSONObject) : WeatherForecast{
                 wInfo.city = city
                 wInfo.country = country
 
-                forecasts.add(wInfo)
-
+                addWeatherInfo(wInfo)
                 i++
             }
         }
@@ -131,29 +130,40 @@ private fun constructWeatherInfo(listItem: JSONObject) : WeatherInfo{
     )
 }
 
-fun WeatherInfo.fromCursor(c : Cursor): WeatherInfo {
-    with(WeatherProvider){
-        date = c.getLong(COLUMN_DATE_IDX)
-        city = c.getString(COLUMN_CITY_IDX)
-        country = c.getString(COLUMN_COUNTRY_IDX)
-        main = c.getString(COLUMN_MAIN_IDX )
-        description = c.getString(COLUMN_DESCRIPTION_IDX)
+/**
+ * Extension method that transforms a cursor row in a WeatherForecast object
+ * All validations about the state of the cursor must be made before calling this method
+ */
+fun Cursor.toWeatherForecast(rows : Int) : WeatherForecast {
+    val forecast = WeatherForecast()
 
-        ambientInfo = AmbientInfo().fromCursor(c)
-        icon_url = c.getString(COLUMN_ICON_URL_IDX)
+    for(i in 0 until rows){
+        forecast.addWeatherInfo(toWeatherInfo())
+        moveToNext()
     }
 
-    return this
+    return forecast
 }
 
-fun AmbientInfo.fromCursor(c : Cursor): AmbientInfo {
-    with(WeatherProvider) {
-        temp = c.getDouble(COLUMN_TEMP_IDX)
-        tempMin = c.getDouble(COLUMN_TEMP_MIN_IDX)
-        tempMax = c.getDouble(COLUMN_TEMP_MAX_IDX)
-        pressure = c.getInt(COLUMN_PRESSURE_IDX)
-        humidity = c.getInt(COLUMN_HUMIDITY_IDX)
-    }
+fun Cursor.toWeatherInfo(): WeatherInfo = with(WeatherProvider) {
+    WeatherInfo(
+        date = getLong(COLUMN_DATE_IDX),
+        city = getString(COLUMN_CITY_IDX),
+        country = getString(COLUMN_COUNTRY_IDX),
+        main = getString(COLUMN_MAIN_IDX ),
+        description = getString(COLUMN_DESCRIPTION_IDX),
 
-    return this
+        ambientInfo = toAmbientInfo(),
+        icon_url = getString(COLUMN_ICON_URL_IDX)
+    )
+}
+
+fun Cursor.toAmbientInfo(): AmbientInfo = with(WeatherProvider) {
+    AmbientInfo(
+        temp = getDouble(COLUMN_TEMP_IDX),
+        tempMin = getDouble(COLUMN_TEMP_MIN_IDX),
+        tempMax = getDouble(COLUMN_TEMP_MAX_IDX),
+        pressure = getInt(COLUMN_PRESSURE_IDX),
+        humidity = getInt(COLUMN_HUMIDITY_IDX)
+    )
 }
