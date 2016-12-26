@@ -15,10 +15,6 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Created by luism on 16/12/2016.
- */
-
 class AlarmsDeactivate : BroadcastReceiver(){
 
     override fun onReceive(context: Context?, intent: Intent?) {
