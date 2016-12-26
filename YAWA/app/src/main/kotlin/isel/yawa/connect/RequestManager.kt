@@ -7,6 +7,7 @@ import android.util.LruCache
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
+import com.android.volley.toolbox.NetworkImageView
 import com.android.volley.toolbox.Volley
 import isel.yawa.R
 
@@ -29,6 +30,8 @@ object RequestManager {
     }
 
     fun <T> put(request: Request<T>) = requestQueue.add(request)
+
+    fun fetchImageAndDisplay(url: String?, iconView: NetworkImageView) = iconView.setImageUrl(url, imgLoader)
 }
 
 fun deviceHasConnection(ctx: Context) : Boolean {

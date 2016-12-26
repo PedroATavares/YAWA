@@ -2,14 +2,9 @@ package isel.yawa.present
 
 import android.content.AsyncQueryHandler
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import com.android.volley.Response
-import com.android.volley.toolbox.ImageRequest
 import isel.yawa.Application.Companion.CITY_KEY
 import isel.yawa.R
 import isel.yawa.connect.MappingRequest
@@ -111,7 +106,7 @@ class WeatherActivity : AppCompatActivity() {
                 humidityTextView.text = String.format(resources.getString(R.string.weather_detail_humidity), humidity)
             }
 
-            fetchAndShowIcon(icon_url) // TODO: fix running on UI thread
+            fetchAndShowIcon(icon_url)
         }
     }
 
@@ -120,18 +115,7 @@ class WeatherActivity : AppCompatActivity() {
             return "${resources.getString(R.string.api_image_endpoint)}$icon.png"
         }
 
-        RequestManager.put(ImageRequest(
-                buildIconQueryUrl(icon),
-                Response.Listener<Bitmap> { bitmap -> iconView.setImageBitmap(bitmap) },
-                0,
-                0,
-                iconView.scaleType,
-                Bitmap.Config.ARGB_8888,
-                Response.ErrorListener { error ->
-                    iconView.setBackgroundColor(Color.parseColor("#ff0000"))
-                    Toast.makeText(this, R.string.icon_fetch_failed_message, Toast.LENGTH_SHORT).show()
-                })
-        )
+        RequestManager.fetchImageAndDisplay(buildIconQueryUrl(icon), iconView)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
