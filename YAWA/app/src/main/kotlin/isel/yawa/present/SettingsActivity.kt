@@ -49,10 +49,12 @@ class SettingsActivity : AppCompatActivity() {
 
         save_button.setOnClickListener {
             checkNotifyToggle(editor)
+            val value = if(connection_type.isChecked) "Wifi" else "Any"
+            editor.putString(resources.getString(R.string.connection_type),value)
             if(!period_to_updData.text.isEmpty()){
-                val period = time_notify.text.toString().toLong()
+                val period = period_to_updData.text.toString().toLong()
                 (application as Application).scheduleUpdate(listItems, period)
-                editor.putLong("period",period)
+                editor.putLong(resources.getString(R.string.period_refresh),period)
             }
             editor.commit()
             finish()
@@ -98,7 +100,8 @@ class SettingsActivity : AppCompatActivity() {
         val hour_notify = resources.getString(R.string.time_notify_hour)
         val minute_notify = resources.getString(R.string.time_notify_minute)
 
-        if (notif_toggle.isChecked && !time_notify.text.isEmpty()) {
+        if (notif_toggle.isChecked ) {
+            if(!time_notify.text.isEmpty()){
                 val str = time_notify.text.toString()
                 val formatter = SimpleDateFormat("hh:mm")
                 val date = formatter.parse(str)
@@ -107,11 +110,12 @@ class SettingsActivity : AppCompatActivity() {
                 editor.putInt(minute_notify, minute)
                 editor.putInt(hour_notify, hour)
                 (application as Application).scheduleNotification("Lisbon", hour, minute)
+            }
             return
         }
-
         editor.remove(minute_notify)
         editor.remove(hour_notify)
+        (application as Application).cancelNotificationAlarm()
     }
 
 }

@@ -21,7 +21,7 @@ class Application : android.app.Application() {
     }
 
     fun scheduleUpdate(cities: ArrayList<String>?, repeat_Time: Long) {
-        val action = Intent((applicationContext as Application), CurrentWeatherService::class.java)
+        val action = Intent(this, CurrentWeatherService::class.java)
                 .putExtra("cities", cities)
         (getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager).setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,

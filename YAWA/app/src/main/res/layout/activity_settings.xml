@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="74dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/clearBtn" />
 
     <EditText
         android:layout_width="match_parent"
@@ -37,7 +38,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/addBtn"
-        android:layout_alignParentStart="true" />
+        android:layout_alignEnd="@+id/period_to_updData" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -84,24 +85,25 @@
         android:layout_below="@+id/notif_toggle"
         android:layout_alignParentStart="true" />
 
+    <ToggleButton
+        android:text="ToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/connection_type"
+        android:textOff="Any"
+        android:textOn="Wifi Only"
+        android:layout_alignBaseline="@+id/clearBtn"
+        android:layout_alignBottom="@+id/clearBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/addBtn" />
+
     <Button
         android:text="SAVE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/save_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="32dp" />
-
-    <ToggleButton
-        android:text="ToggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/save_button"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="11dp"
-        android:id="@+id/type_connection"
-        android:textOff="Any"
-        android:textOn="Wifi Only" />
+        android:layout_above="@+id/connection_type"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/addBtn" />
 
 </RelativeLayout>
