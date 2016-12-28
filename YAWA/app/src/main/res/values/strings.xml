@@ -45,6 +45,20 @@
     <string name="favourite_city" translatable="false">favourite_city</string>
     <string name="cities_to_Follow" translatable="false">cities</string>
     <string name="connection_type" translatable="false">connection_type</string>
+    <string name="type_of_connection">Type of connection</string>
+    <string name="type_of_connection_desc">Set the type of connection to update data</string>
+    <string name="update_frequency">Update Frequency</string>
+    <string name="update_frequency_desc">Set Update Frequency</string>
+    <string name="add_cities">Add Cities and Set Notification</string>
+    <string name="add_cities_to_follow">Add cities to follow</string>
+    <string name="add_cities_to_follow_desc">Add all cities to be updated, favorite city and the time for the notification</string>
+    <string name="add_new_city">Add New City</string>
+    <string name="clear">Clear List</string>
+    <string name="save">SAVE</string>
+    <string name="notifications_on">Notifications ON</string>
+    <string name="notifications_off">Notifications OFF</string>
+    <string name="favourite_city_txt">Favorite City:</string>
+    <string name="set_favourite">Set Favourite</string>
 
 
 

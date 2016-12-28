@@ -23,4 +23,19 @@
     <string name="weather_detail_pressure">Pressão: %d</string>
     <string name="settings_popup_title">Apagar entrada</string>
     <string name="settings_popup_confirm">Quer apagar a entrada?</string>
+    <string name="type_of_connection">Tipo de coneção</string>
+    <string name="type_of_connection_desc">Definir o tipo de coneção a usar</string>
+    <string name="update_frequency">Frequencia a Actualizar</string>
+    <string name="update_frequency_desc">Frequencia de actualização</string>
+    <string name="add_cities">Adicionar cidades e defenir notificações</string>
+    <string name="add_cities_to_follow">Adicionar cidades a seguir</string>
+    <string name="add_cities_to_follow_desc">Adiciona as cidades a ser actualizadas, cidade preferida e horas da notificação</string>
+    <string name="add_new_city">Adicionar Cidade</string>
+    <string name="clear">Limpar Lista</string>
+    <string name="save">Guardar</string>
+    <string name="notifications_on">Notificações Ligadas</string>
+    <string name="notifications_off">Notificações Desligadas</string>
+    <string name="favourite_city_txt">Cidade favorita:</string>
+    <string name="set_favourite">Novo Favorito</string>
+
 </resources>

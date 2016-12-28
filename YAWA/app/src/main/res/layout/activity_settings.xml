@@ -13,7 +13,7 @@
 
     <Button
         android:id="@+id/addBtn"
-        android:text="Add New City"
+        android:text="@string/add_new_city"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="74dp"
@@ -34,7 +34,7 @@
 
     <Button
         android:id="@+id/clearBtn"
-        android:text="Clear"
+        android:text="@string/clear"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/addBtn"
@@ -61,8 +61,8 @@
         android:layout_below="@+id/clearBtn"
         android:layout_alignParentStart="true"
         android:id="@+id/notif_toggle"
-        android:textOn="Notifications ON"
-        android:textOff="Notifications OFF" />
+        android:textOn="@string/notifications_on"
+        android:textOff="no" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:text="SAVE"
+        android:text="@string/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/save_button"
@@ -83,5 +83,7 @@
         android:layout_alignBottom="@+id/clearBtn"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/addBtn" />
+
+
 
 </RelativeLayout>

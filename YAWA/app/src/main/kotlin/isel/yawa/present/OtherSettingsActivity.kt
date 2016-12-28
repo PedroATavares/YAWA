@@ -4,6 +4,7 @@ package isel.yawa.present
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,7 +12,9 @@ import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import isel.yawa.Application
+import isel.yawa.Application.Companion.CITY_KEY
 import isel.yawa.R
+import isel.yawa.model.services.NotificationEmitter
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -91,6 +94,11 @@ class OtherSettingsActivity : AppCompatActivity() {
                 })
                 setNegativeButton(android.R.string.no, { dialogInterface, i ->  })
 
+                setNeutralButton(getString(R.string.set_favourite),{dialogInterfase, i ->
+                    editor.putString("favourite_city",listItems!!.get(idx))
+                    editor.commit()
+                })
+
                 show()
             }
         }
@@ -108,6 +116,7 @@ class OtherSettingsActivity : AppCompatActivity() {
                 val hour = date.hours
                 val minute = date.minutes
                 val city = sharedPref.getString(resources.getString(R.string.favourite_city),null)
+                System.out.println(city)
                 if(city != null){
                     editor.putInt(minute_notify, minute)
                     editor.putInt(hour_notify, hour)

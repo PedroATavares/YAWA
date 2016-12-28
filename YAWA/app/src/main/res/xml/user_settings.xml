@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="Settings" >
-        <EditTextPreference
-            android:title="Favourite City"
-            android:summary="Set Your Favourite City"
-            android:key="favourite_city"/>
+    <PreferenceCategory android:title="@string/settings" >
         <ListPreference
             android:key="connection_type"
-            android:title="Type of connection"
-            android:summary="Set the type of connection to update data"
+            android:title="@string/type_of_connection"
+            android:summary="@string/type_of_connection_desc"
             android:entries="@array/connectionType"
             android:entryValues="@array/connectionTypeValues"
             />
 
         <ListPreference
             android:key="period_refresh"
-            android:title="Update Frequency"
-            android:summary="Set Update Frequency"
+            android:title="@string/update_frequency"
+            android:summary="@string/update_frequency_desc"
             android:entries="@array/updateFrequency"
             android:entryValues="@array/updateFrequencyValues"
             />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Add Cities and Set Notification" >
+    <PreferenceCategory android:title="@string/add_cities" >
         <PreferenceScreen
-            android:title="Add cities to follow"
-            android:summary="Add all cities to be updated and the time for the notification">
+            android:title="@string/add_cities_to_follow"
+            android:summary="@string/add_cities_to_follow_desc">
             <intent android:targetPackage="isel.yawa" android:targetClass="isel.yawa.present.OtherSettingsActivity" />
         </PreferenceScreen>
     </PreferenceCategory>

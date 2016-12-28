@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import isel.yawa.Application
 import isel.yawa.R
+import isel.yawa.model.services.NotificationEmitter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +21,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         settings_button.setOnClickListener{
+
             startActivity(Intent(this, PreferencesActivity::class.java))
+
         }
 
         editText.setOnEditorActionListener({ tv, actionId, kev ->
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             val city = editText.text.toString()
             doWeatherQuery(city)
         }
+
     }
 
     private fun  doWeatherQuery(city: String) {
