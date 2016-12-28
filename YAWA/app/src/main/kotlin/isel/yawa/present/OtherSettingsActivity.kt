@@ -110,7 +110,7 @@ class OtherSettingsActivity : AppCompatActivity() {
                     editor.putInt(hour_notify, hour)
                     (application as Application).scheduleNotification(city, hour, minute)
                 }else{
-                    Toast.makeText(this,"Favourite City Not Defined",Toast.LENGTH_LONG)
+                    Toast.makeText(this,"Favourite City Not Defined",Toast.LENGTH_LONG).show()
                 }
             }
             return
