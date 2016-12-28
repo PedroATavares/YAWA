@@ -2,8 +2,12 @@ package isel.yawa.connect
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.util.LruCache
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.toolbox.ImageLoader
+import com.android.volley.toolbox.NetworkImageView
 import com.android.volley.toolbox.Volley
 import isel.yawa.R
 
@@ -15,12 +19,19 @@ import isel.yawa.R
 object RequestManager {
 
     private lateinit var requestQueue: RequestQueue
+    lateinit var imgLoader : ImageLoader
 
     fun setup(applicationContext: Context) {
         requestQueue = Volley.newRequestQueue(applicationContext)
+
+        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024)
+        val maxCacheSize = (maxMemory/ 8).toInt()
+        imgLoader = ImageLoader(requestQueue, LruImageCache(maxCacheSize))
     }
 
     fun <T> put(request: Request<T>) = requestQueue.add(request)
+
+    fun fetchImageAndDisplay(url: String?, iconView: NetworkImageView) = iconView.setImageUrl(url, imgLoader)
 }
 
 fun deviceHasConnection(ctx: Context) : Boolean {
@@ -31,19 +42,16 @@ fun deviceHasConnection(ctx: Context) : Boolean {
 }
 
 // i love kotlin
-private fun  Context.buildQueryString(city: String, endPoint: String, count:String): String {
+private fun  Context.buildQueryString(city: String, endPoint: String): String {
     val api_base = resources.getString(R.string.api_base_uri)
     val api_key = resources.getString(R.string.api_key)
     val api_lang = resources.getString(R.string.api_lang)
 
-    return "$api_base$endPoint?$api_key&$api_lang&units=metric$count&q=$city"
+    return "$api_base$endPoint?$api_key&$api_lang&units=metric&q=${Uri.encode(city)}"
 }
 
 fun Context.buildWeatherQueryString(city : String) =
-        buildQueryString(city, resources.getString(R.string.api_weather_endpoint),"")
-
-fun Context.buildForecastQueryString(city : String) =
-        buildQueryString(city, resources.getString(R.string.api_forecast_endpoint),"")
+        buildQueryString(city, resources.getString(R.string.api_weather_endpoint))
 
 fun Context.buildDailyForecastQueryString(city : String) =
-        buildQueryString(city, resources.getString(R.string.api_daily_forecast_endpoint),"&cnt=5")
+        buildQueryString(city, resources.getString(R.string.api_daily_forecast_endpoint))+"&cnt=5"

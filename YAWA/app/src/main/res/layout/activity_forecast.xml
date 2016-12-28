@@ -41,7 +41,7 @@
                 android:id="@+id/todaydesc"
                 android:layout_weight="1" />
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="85dp"
                 android:layout_height="65dp"
                 android:id="@+id/todayicon"
@@ -63,7 +63,7 @@
                 android:id="@+id/tomorrowdesc"
                 android:layout_weight="1" />
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="85dp"
                 android:layout_height="65dp"
                 android:id="@+id/tomorrowicon"
@@ -85,7 +85,7 @@
                 android:id="@+id/twodaysdesc"
                 android:layout_weight="1" />
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="85dp"
                 android:layout_height="65dp"
                 android:id="@+id/twodaysicon"
@@ -107,7 +107,7 @@
                 android:id="@+id/threedaysdesc"
                 android:layout_weight="1" />
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="85dp"
                 android:layout_height="65dp"
                 android:id="@+id/threedaysicon"
@@ -129,7 +129,7 @@
                 android:id="@+id/fourdaysdesc"
                 android:layout_weight="1" />
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="85dp"
                 android:layout_height="65dp"
                 android:id="@+id/fourdaysicon"

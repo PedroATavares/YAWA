@@ -4,11 +4,11 @@
     <string name="weather_forecast_description">Descrição</string>
     <string name="get_current_weather_fail_message">Falha ao obter informação de tempo atual</string>
     <string name="get_forecast_fail_message">Falha ao obter previsão do tempo</string>
-    <string name="icon_fetch_failed_message">Falha ao ao obter icone do tempo</string>
+    <string name="icon_fetch_failed_message">Falha ao obter icone do tempo</string>
     <string name="no_connection_message">Oops, parece que não há conexão</string>
     <string name="_5_day_button_default">5 dias</string>
     <string name="go">Ir</string>
-    <string name="settings">Defenições</string>
+    <string name="settings">Definições</string>
     <string name="text_field_default">Insira o nome da cidade</string>
     <string name="today_button_default">Hoje</string>
     <string name="api_lang">lang=pt</string>
@@ -19,4 +19,8 @@
     <string name="weather_forecast_today">Hoje</string>
     <string name="weather_forecast_tomorrow">Amanhã</string>
     <string name="powered_by">Patrocinado por</string>
+    <string name="weather_detail_humidity" translatable="false">Humidade: %d</string>
+    <string name="weather_detail_pressure">Pressão: %d</string>
+    <string name="settings_popup_title">Apagar entrada</string>
+    <string name="settings_popup_confirm">Quer apagar a entrada?</string>
 </resources>

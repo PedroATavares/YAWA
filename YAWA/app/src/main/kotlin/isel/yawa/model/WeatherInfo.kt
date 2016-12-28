@@ -4,8 +4,8 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class WeatherInfo(
-        var date: Long?,         // dt
-        var city: String?,       // name
+        var date: Long?,
+        var city: String?,
         var country: String?,
         var main: String?,
         var description: String?,
@@ -48,5 +48,5 @@ data class WeatherInfo(
         }
     }
 
-    override fun describeContents(): Int = 0
+    override fun describeContents() = 0
 }

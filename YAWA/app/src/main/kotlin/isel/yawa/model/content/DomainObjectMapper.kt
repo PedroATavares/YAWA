@@ -1,6 +1,7 @@
 package isel.yawa.model.content
 
 import android.content.ContentValues
+import android.database.Cursor
 import isel.yawa.model.AmbientInfo
 import isel.yawa.model.WeatherForecast
 import isel.yawa.model.WeatherInfo
@@ -101,8 +102,7 @@ fun WeatherForecast.fromJsonObject(forecast: JSONObject) : WeatherForecast{
                 wInfo.city = city
                 wInfo.country = country
 
-                forecasts.add(wInfo)
-
+                addWeatherInfo(wInfo)
                 i++
             }
         }
@@ -130,3 +130,40 @@ private fun constructWeatherInfo(listItem: JSONObject) : WeatherInfo{
     )
 }
 
+/**
+ * Extension method that transforms a cursor row in a WeatherForecast object
+ * All validations about the state of the cursor must be made before calling this method
+ */
+fun Cursor.toWeatherForecast(rows : Int) : WeatherForecast {
+    val forecast = WeatherForecast()
+
+    for(i in 0 until rows){
+        forecast.addWeatherInfo(toWeatherInfo())
+        moveToNext()
+    }
+
+    return forecast
+}
+
+fun Cursor.toWeatherInfo(): WeatherInfo = with(WeatherProvider) {
+    WeatherInfo(
+        date = getLong(COLUMN_DATE_IDX),
+        city = getString(COLUMN_CITY_IDX),
+        country = getString(COLUMN_COUNTRY_IDX),
+        main = getString(COLUMN_MAIN_IDX ),
+        description = getString(COLUMN_DESCRIPTION_IDX),
+
+        ambientInfo = toAmbientInfo(),
+        icon_url = getString(COLUMN_ICON_URL_IDX)
+    )
+}
+
+fun Cursor.toAmbientInfo(): AmbientInfo = with(WeatherProvider) {
+    AmbientInfo(
+        temp = getDouble(COLUMN_TEMP_IDX),
+        tempMin = getDouble(COLUMN_TEMP_MIN_IDX),
+        tempMax = getDouble(COLUMN_TEMP_MAX_IDX),
+        pressure = getInt(COLUMN_PRESSURE_IDX),
+        humidity = getInt(COLUMN_HUMIDITY_IDX)
+    )
+}

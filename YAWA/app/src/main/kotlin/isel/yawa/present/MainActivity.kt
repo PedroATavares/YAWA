@@ -1,22 +1,13 @@
 package isel.yawa.present
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import isel.yawa.Application
 import isel.yawa.R
-import isel.yawa.connect.buildDailyForecastQueryString
-import isel.yawa.connect.buildForecastQueryString
-import isel.yawa.connect.buildWeatherQueryString
-import isel.yawa.connect.deviceHasConnection
-import isel.yawa.model.services.CITIES_EXTRA_KEY
-import isel.yawa.model.services.CurrentWeatherService
-import isel.yawa.model.services.ForecastFetchingService
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         settings_button.setOnClickListener{
-            startActivity(Intent(this, SettingsActivity::class.java));
+            startActivity(Intent(this, PreferencesActivity::class.java))
         }
 
         editText.setOnEditorActionListener({ tv, actionId, kev ->
@@ -50,30 +41,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun  doWeatherQuery(city: String) {
-        if(!deviceHasConnection(this)){
-            Toast.makeText(this, R.string.no_connection_message, Toast.LENGTH_LONG).show()
+        if (radioButton_day5.isChecked) {
+            showForecastForCity(city)
             return
         }
 
-        val urlEncodedCity = Uri.encode(city)
-
-        if (radioButton_day5.isChecked)
-            getForecastForCity(urlEncodedCity)
-        else if(today_button.isChecked)
-            getCurrentWeatherForCity(urlEncodedCity)
+        if(today_button.isChecked)
+            showCurrentWeatherForCity(city)
     }
 
-    private fun getCurrentWeatherForCity(city : String) {
-        startActivity(Intent(this, WeatherActivity::class.java).apply {
-            val qString : String = buildWeatherQueryString(city)
-            putExtra("url", qString)
-        })
+    private fun showForecastForCity(city : String) {
+        beginActivityWithExtra(ForecastActivity::class.java, city)
     }
 
-    private fun getForecastForCity(city : String) {
-        startActivity(Intent(this, ForecastActivity::class.java).apply {
-            val qString : String = buildDailyForecastQueryString(city)
-            putExtra("url", qString)
+    private fun showCurrentWeatherForCity(city : String) {
+        beginActivityWithExtra(WeatherActivity::class.java, city)
+    }
+
+    private fun beginActivityWithExtra(clazz : Class<out Activity>, city: String){
+        startActivity(Intent(this, clazz).apply {
+            putExtra(Application.CITY_KEY, city)
         })
     }
 }

@@ -8,9 +8,9 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import isel.yawa.connect.DtoGetRequest
-import isel.yawa.model.CityForecast
-import isel.yawa.model.CityWeather
+import isel.yawa.connect.MappingRequest
+import isel.yawa.model.WeatherInfo
+import isel.yawa.model.content.fromJsonObject
 
 import org.junit.Before
 import org.junit.Test
@@ -87,9 +87,9 @@ class CheckAPIResponsiveness {
     @Test
     fun test_successfulResponseParsing() {
         requestQueue.add(
-                DtoGetRequest<CityWeather>(
+                MappingRequest(
                         LONDON_WEATHER_URL,
-                        CityWeather::class.java,
+                        { WeatherInfo().fromJsonObject(it) },
                         { wt -> executeAndPublishResult { assertNotNull(wt) } },
                         { error -> executeAndPublishResult { fail() } }
                 )

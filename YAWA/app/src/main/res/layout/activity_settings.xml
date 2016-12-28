@@ -8,17 +8,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="isel.yawa.present.SettingsActivity">
+    tools:context="isel.yawa.present.OtherSettingsActivity">
 
 
     <Button
         android:id="@+id/addBtn"
-        android:text="Add New Item"
+        android:text="Add New City"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="74dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/clearBtn" />
 
     <EditText
         android:layout_width="match_parent"
@@ -37,14 +38,50 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/addBtn"
+        android:layout_alignStart="@+id/tableRow"
+        android:layout_alignEnd="@+id/time_notify" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/clearBtn"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="209dp" >
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView" />
+    </TableRow>
+
+    <ToggleButton
+        android:text="ToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/clearBtn"
+        android:layout_alignParentStart="true"
+        android:id="@+id/notif_toggle"
+        android:textOn="Notifications ON"
+        android:textOff="Notifications OFF" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/time_notify"
+        android:hint="Hora da Notificação"
+        android:inputType="time"
+        android:layout_below="@+id/notif_toggle"
         android:layout_alignParentStart="true" />
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:drawSelectorOnTop="false"
-        android:layout_below="@+id/clearBtn"
-        android:layout_centerHorizontal="true" />
+    <Button
+        android:text="SAVE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_button"
+        android:layout_alignBaseline="@+id/clearBtn"
+        android:layout_alignBottom="@+id/clearBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/addBtn" />
 
 </RelativeLayout>

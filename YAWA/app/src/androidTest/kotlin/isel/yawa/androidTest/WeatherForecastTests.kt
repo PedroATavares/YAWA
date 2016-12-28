@@ -55,7 +55,7 @@ class WeatherForecastTests {
 
         val _new = WeatherForecast(dummies)
 
-        _new.forecasts.forEach {
+        _new.getForecastsThat { true }.forEach {
             with(it){
                 assertEquals(DUMMY_DATE, date)
                 assertEquals(DUMMY_CITY, city)
@@ -83,7 +83,7 @@ class WeatherForecastTests {
         parcel.setDataPosition(0)
 
         val createdFromParcel = WeatherForecast.CREATOR.createFromParcel(parcel)
-        createdFromParcel.forecasts.forEach {
+        createdFromParcel.getForecastsThat { true }.forEach {
             assertWeatherInfoEquality(it)
         }
     }
