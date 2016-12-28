@@ -18,8 +18,12 @@ class PreferencesActivity : PreferenceActivity() {
 
         preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-            val cities = sharedPref.getStringSet(resources.getString(R.string.cities_to_Follow),null) as ArrayList<String>
-            (application as Application).scheduleUpdate(cities, newValue as Long)
+            val cities = sharedPref.getStringSet(resources.getString(R.string.cities_to_Follow),null)
+            var listItems =  ArrayList<String>(cities)
+            if(listItems.size != 0){
+                (application as Application).scheduleUpdateCurrentWeather(listItems, newValue as Long)
+                (application as Application).scheduleUpdateForecast(listItems, newValue)
+            }
             true
         }
 

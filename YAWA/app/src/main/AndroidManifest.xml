@@ -38,20 +38,24 @@
         <service
             android:name=".model.services.ForecastFetchingService"
             android:exported="false"/>
-        <receiver android:name=".broadcastReceivers.Notification" />
 
-        <receiver android:name=".broadcastReceivers.AlarmsDeactivate">
+        <service android:name=".model.services.NotificationEmitter"
+            android:exported="false"/>
+
+        <receiver android:name=".broadcastReceivers.AlarmsDeactivate_Register">
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_LOW">
                 </action>
             </intent-filter>
-        </receiver>
-
-        <receiver android:name=".broadcastReceivers.AlarmsRegister">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED">
+                <action android:name="android.intent.action.REBOOT">
                 </action>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_OKAY">
+                </action>
+            </intent-filter>
+
         </receiver>
     </application>
 

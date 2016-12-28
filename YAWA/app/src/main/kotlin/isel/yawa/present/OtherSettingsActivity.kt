@@ -57,8 +57,9 @@ class OtherSettingsActivity : AppCompatActivity() {
         addBtn.setOnClickListener {
             if(!editCity.text.isEmpty()) {
                 listItems!!.add(editCity.text.toString())
-                val period = sharedPref.getLong(resources.getString(R.string.period_refresh),180)
-                (application as Application).scheduleUpdate(listItems, period)
+                val period = sharedPref.getString(resources.getString(R.string.period_refresh),180.toString()).toLong()
+                (application as Application).scheduleUpdateCurrentWeather(listItems, period)
+                //(application as Application).scheduleUpdateForecast(listItems,period)
                 editCity.text.clear()
                 editor.putStringSet(SHARED_PREFERENCES_CITIES, listItems!!.toSet())
                 editor.commit()
@@ -71,7 +72,8 @@ class OtherSettingsActivity : AppCompatActivity() {
             editor.commit()
             listItems!!.clear()
             adapter!!.notifyDataSetChanged()
-            (application as Application).cancelUpdateAlarm()
+            (application as Application).cancelUpdateCurrentWeather()
+            (application as Application).cancelUpdateForecast()
         }
 
         listView.setOnItemClickListener { adapterView, view, idx, l ->
