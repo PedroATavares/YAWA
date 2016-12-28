@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="updateFrequency">
+        <item name="2">Twice per day</item>
+        <item name="3">Three times per day</item>
+        <item name="4">Four times per day</item>
+    </string-array>
+    <string-array name="updateFrequencyValues">
+        <item name="1">12</item>
+        <item name="3">8</item>
+        <item name="4">6</item>
+    </string-array>
+
+    <string-array name="connectionType">
+        <item name="1">Wifi</item>
+        <item name="2">Any</item>
+    </string-array>
+    <string-array name="connectionTypeValues">
+        <item name="1">Wifi</item>
+        <item name="2">Any</item>
+    </string-array>
+
+</resources>

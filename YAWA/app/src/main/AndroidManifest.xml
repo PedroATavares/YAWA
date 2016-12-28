@@ -22,7 +22,8 @@
         <activity android:name=".present.CreditsActivity" />
         <activity android:name=".present.WeatherActivity" />
         <activity android:name=".present.ForecastActivity" />
-        <activity android:name=".present.SettingsActivity" />
+        <activity android:name=".present.OtherSettingsActivity" />
+        <activity android:name=".present.PreferencesActivity" />
 
         <provider
             android:name=".model.content.WeatherProvider"

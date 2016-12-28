@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import isel.yawa.Application
 import isel.yawa.R
@@ -14,9 +15,8 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SettingsActivity : AppCompatActivity() {
+class OtherSettingsActivity : AppCompatActivity() {
     companion object {
-        const val SHARED_PREFERENCES_KEY ="userprefs"
         const val SHARED_PREFERENCES_CITIES ="cities"
     }
 
@@ -31,7 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val sharedPref = getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         val editor = sharedPref.edit()
         if(!sharedPref.contains(SHARED_PREFERENCES_CITIES)) {
             val set = HashSet<String>()
@@ -49,13 +49,12 @@ class SettingsActivity : AppCompatActivity() {
 
         save_button.setOnClickListener {
             checkNotifyToggle(editor)
-            val value = if(connection_type.isChecked) "Wifi" else "Any"
-            editor.putString(resources.getString(R.string.connection_type),value)
+            /*editor.putString(resources.getString(R.string.connection_type),value)
             if(!period_to_updData.text.isEmpty()){
                 val period = period_to_updData.text.toString().toLong()
                 (application as Application).scheduleUpdate(listItems, period)
                 editor.putLong(resources.getString(R.string.period_refresh),period)
-            }
+            }*/
             editor.commit()
             finish()
         }
@@ -63,6 +62,7 @@ class SettingsActivity : AppCompatActivity() {
         addBtn.setOnClickListener {
             if(!editCity.text.isEmpty()) {
                 listItems!!.add(editCity.text.toString())
+                (application as Application).scheduleUpdate(listItems, 180)
                 editCity.text.clear()
                 editor.putStringSet(SHARED_PREFERENCES_CITIES, listItems!!.toSet())
                 editor.commit()
@@ -83,13 +83,13 @@ class SettingsActivity : AppCompatActivity() {
                 setMessage(getString(R.string.settings_popup_confirm))
                 setCancelable(true)
 
-                setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialogInterface, i ->
+                setPositiveButton(android.R.string.yes, { dialogInterface, i ->
                     listItems!!.removeAt(idx)
                     editor.putStringSet(SHARED_PREFERENCES_CITIES, listItems!!.toSet())
                     editor.commit()
                     adapter!!.notifyDataSetChanged()
                 })
-                setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialogInterface, i ->  })
+                setNegativeButton(android.R.string.no, { dialogInterface, i ->  })
 
                 show()
             }

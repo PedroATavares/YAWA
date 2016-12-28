@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         settings_button.setOnClickListener{
-            startActivity(Intent(this, SettingsActivity::class.java));
+            startActivity(Intent(this, PreferencesActivity::class.java))
         }
 
         editText.setOnEditorActionListener({ tv, actionId, kev ->
