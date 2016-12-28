@@ -38,7 +38,9 @@
         <service
             android:name=".model.services.ForecastFetchingService"
             android:exported="false"/>
-        <receiver android:name=".broadcastReceivers.Notification" />
+
+        <service android:name=".model.services.NotificationEmitter"
+            android:exported="false"/>
 
         <receiver android:name=".broadcastReceivers.AlarmsDeactivate">
             <intent-filter>
