@@ -9,6 +9,7 @@ import isel.yawa.R
 import java.util.*
 
 
+@Suppress("DEPRECATION")
 class PreferencesActivity : PreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +22,8 @@ class PreferencesActivity : PreferenceActivity() {
             val cities = sharedPref.getStringSet(resources.getString(R.string.cities_to_Follow),null)
             var listItems =  ArrayList<String>(cities)
             if(listItems.size != 0){
-                (application as Application).scheduleUpdateCurrentWeather(listItems, newValue as Long)
-                (application as Application).scheduleUpdateForecast(listItems, newValue)
+                (application as Application).scheduleUpdateCurrentWeather(listItems, newValue.toString().toLong())
+                (application as Application).scheduleUpdateForecast(listItems, newValue.toString().toLong())
             }
             true
         }

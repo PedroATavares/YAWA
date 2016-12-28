@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("DEPRECATION")
 class OtherSettingsActivity : AppCompatActivity() {
     companion object {
         const val SHARED_PREFERENCES_CITIES ="cities"
