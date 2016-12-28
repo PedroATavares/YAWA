@@ -41,7 +41,7 @@
     <string name="UserPreferences" translatable="false">userprefs</string>
     <string name="time_notify_minute" translatable="false">minute_notify</string>
     <string name="time_notify_hour" translatable="false">hour_notify</string>
-    <string name="period_refresh" translatable="false">period</string>
+    <string name="period_refresh" translatable="false">period_refresh</string>
     <string name="favourite_city" translatable="false">city</string>
     <string name="cities_to_Follow" translatable="false">cities</string>
     <string name="connection_type" translatable="false">connection_type</string>

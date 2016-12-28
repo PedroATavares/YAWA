@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import isel.yawa.Application
 import isel.yawa.R
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -48,13 +49,7 @@ class OtherSettingsActivity : AppCompatActivity() {
         listView.adapter = adapter
 
         save_button.setOnClickListener {
-            checkNotifyToggle(editor)
-            /*editor.putString(resources.getString(R.string.connection_type),value)
-            if(!period_to_updData.text.isEmpty()){
-                val period = period_to_updData.text.toString().toLong()
-                (application as Application).scheduleUpdate(listItems, period)
-                editor.putLong(resources.getString(R.string.period_refresh),period)
-            }*/
+            checkNotifyToggle(sharedPref,editor)
             editor.commit()
             finish()
         }
@@ -62,7 +57,8 @@ class OtherSettingsActivity : AppCompatActivity() {
         addBtn.setOnClickListener {
             if(!editCity.text.isEmpty()) {
                 listItems!!.add(editCity.text.toString())
-                (application as Application).scheduleUpdate(listItems, 180)
+                val period = sharedPref.getLong(resources.getString(R.string.period_refresh),180)
+                (application as Application).scheduleUpdate(listItems, period)
                 editCity.text.clear()
                 editor.putStringSet(SHARED_PREFERENCES_CITIES, listItems!!.toSet())
                 editor.commit()
@@ -75,6 +71,7 @@ class OtherSettingsActivity : AppCompatActivity() {
             editor.commit()
             listItems!!.clear()
             adapter!!.notifyDataSetChanged()
+            (application as Application).cancelUpdateAlarm()
         }
 
         listView.setOnItemClickListener { adapterView, view, idx, l ->
@@ -96,7 +93,7 @@ class OtherSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkNotifyToggle(editor: SharedPreferences.Editor) {
+    private fun checkNotifyToggle(sharedPref: SharedPreferences,editor: SharedPreferences.Editor) {
         val hour_notify = resources.getString(R.string.time_notify_hour)
         val minute_notify = resources.getString(R.string.time_notify_minute)
 
@@ -107,9 +104,14 @@ class OtherSettingsActivity : AppCompatActivity() {
                 val date = formatter.parse(str)
                 val hour = date.hours
                 val minute = date.minutes
-                editor.putInt(minute_notify, minute)
-                editor.putInt(hour_notify, hour)
-                (application as Application).scheduleNotification("Lisbon", hour, minute)
+                val city = sharedPref.getString(resources.getString(R.string.favourite_city),null)
+                if(city != null){
+                    editor.putInt(minute_notify, minute)
+                    editor.putInt(hour_notify, hour)
+                    (application as Application).scheduleNotification(city, hour, minute)
+                }else{
+                    Toast.makeText(this,"Favourite City Not Defined",Toast.LENGTH_LONG)
+                }
             }
             return
         }

@@ -16,16 +16,16 @@ class AlarmsRegister : BroadcastReceiver(){
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(app)
 
         if(sharedPref.contains(app.resources.getString(R.string.time_notify_hour))){
-            val city = app.resources.getString(R.string.favourite_city)
+            val city = sharedPref.getString(app.resources.getString(R.string.favourite_city),null)
             val hour = sharedPref.getInt(app.resources.getString(R.string.time_notify_hour),0)
             val minute = sharedPref.getInt(app.resources.getString(R.string.time_notify_minute),0)
-            isel.yawa.Application().scheduleNotification(city, hour, minute)
+            app.scheduleNotification(city, hour, minute)
         }
 
         if(sharedPref.contains(app.resources.getString(R.string.period_refresh))){
             val cities = sharedPref.getStringSet(app.resources.getString(R.string.cities_to_Follow),null) as ArrayList<String>
             val period = sharedPref.getLong(app.resources.getString(R.string.period_refresh),0)
-            isel.yawa.Application().scheduleUpdate(cities,period)
+            app.scheduleUpdate(cities,period)
         }
     }
 }

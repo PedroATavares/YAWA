@@ -6,9 +6,9 @@
         <item name="4">Four times per day</item>
     </string-array>
     <string-array name="updateFrequencyValues">
-        <item name="1">12</item>
-        <item name="3">8</item>
-        <item name="4">6</item>
+        <item name="2">720</item>
+        <item name="3">480</item>
+        <item name="4">360</item>
     </string-array>
 
     <string-array name="connectionType">
