@@ -57,15 +57,13 @@ class Application : android.app.Application() {
         val action = Intent(this, NotificationEmitter::class.java).putExtra(CITY_KEY, city)
 
         val alarmManager = getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(
+        alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 cal.timeInMillis,
+                24*60*60*1000,
                 PendingIntent.getService(this, 2, action, PendingIntent.FLAG_UPDATE_CURRENT))
 
     }
-
-
-
     fun cancelNotificationAlarm(){
         val intent = Intent(this, NotificationEmitter::class.java)
         val pendingIntent = PendingIntent.getService(this, 2, intent, 0)
