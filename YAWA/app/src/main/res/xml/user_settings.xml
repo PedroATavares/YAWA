@@ -26,7 +26,7 @@
         <PreferenceScreen
             android:title="Add cities to follow"
             android:summary="Add all cities to be updated and the time for the notification">
-            <intent android:targetPackage="isel.yawa" android:targetClass="isel.yawa.present.SettingsActivity" />
+            <intent android:targetPackage="isel.yawa" android:targetClass="isel.yawa.present.OtherSettingsActivity" />
         </PreferenceScreen>
     </PreferenceCategory>
 
