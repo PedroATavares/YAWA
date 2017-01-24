@@ -37,5 +37,8 @@
     <string name="notifications_off">Notificações Desligadas</string>
     <string name="favourite_city_txt">Cidade favorita:</string>
     <string name="set_favourite">Novo Favorito</string>
-
+    <string name="local">Metereologia na posição actual</string>
+    <string name="pos_not_found">Não foi possivel encontrar um método de localização!</string>
+    <string name="permission_not_granted">Não é possivel saber a possição do dispositivo sem a permição do utilizador!</string>
+    <string name="provide_text">Forneça o nome de uma cidade!</string>
 </resources>

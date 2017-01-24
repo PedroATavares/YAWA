@@ -69,4 +69,12 @@
         android:layout_above="@+id/settings_button"
         android:layout_alignStart="@+id/creditsButton" />
 
+    <Button
+        android:text="@string/local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/local"
+        android:layout_above="@+id/go_button"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

@@ -55,3 +55,12 @@ fun Context.buildWeatherQueryString(city : String) =
 
 fun Context.buildDailyForecastQueryString(city : String) =
         buildQueryString(city, resources.getString(R.string.api_daily_forecast_endpoint))+"&cnt=5"
+
+fun Context.buildWeatherFromCurrLocationQueryString(lat : Double, longitude: Double):String {
+    val api_base = resources.getString(R.string.api_base_uri)
+    val api_key = resources.getString(R.string.api_key)
+    val api_lang = resources.getString(R.string.api_lang)
+
+    val result= "$api_base"+"weather?$api_key&$api_lang&units=metric&lat=${Uri.encode(lat.toString())}&lon=${Uri.encode(longitude.toString())}"
+    return result
+}

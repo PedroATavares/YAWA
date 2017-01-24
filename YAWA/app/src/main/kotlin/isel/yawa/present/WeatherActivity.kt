@@ -9,6 +9,7 @@ import isel.yawa.Application.Companion.CITY_KEY
 import isel.yawa.R
 import isel.yawa.connect.MappingRequest
 import isel.yawa.connect.RequestManager
+import isel.yawa.connect.buildWeatherFromCurrLocationQueryString
 import isel.yawa.connect.buildWeatherQueryString
 import isel.yawa.model.WeatherInfo
 import isel.yawa.model.content.WeatherProvider
@@ -42,14 +43,18 @@ class WeatherActivity : AppCompatActivity() {
             restoreViewState(savedInstanceState.getParcelable(WEATHER_KEY))
             return
         }
-
-        val city = intent.extras.getString(CITY_KEY)
-        with(WeatherProvider) {
-            queryHandler.startQuery(0, city,
-                    WEATHER_CONTENT_URI, null,
-                    "$COLUMN_CITY = ?",
-                    arrayOf(city),
-                    "$COLUMN_DATE desc")
+        val longitude = intent.extras.getDouble("longitude")
+        if(intent.extras.containsKey("latitude") && intent.extras.containsKey("longitude")){
+            fetchWeatherFromCurrLocation(intent.extras.getDouble("latitude"),intent.extras.getDouble("longitude"))
+        }else {
+            val city = intent.extras.getString(CITY_KEY)
+            with(WeatherProvider) {
+                queryHandler.startQuery(0, city,
+                        WEATHER_CONTENT_URI, null,
+                        "$COLUMN_CITY = ?",
+                        arrayOf(city),
+                        "$COLUMN_DATE desc")
+            }
         }
     }
 
@@ -67,10 +72,26 @@ class WeatherActivity : AppCompatActivity() {
         }
     }
 
+
+
     private fun fetchCurrentWeather(city: String){
         RequestManager.put(
                 MappingRequest(
                         buildWeatherQueryString(city),
+                        { WeatherInfo().fromJsonObject(it) },
+                        { restoreViewState(it) },
+                        { error ->
+                            Log.e("ERROR", error.message)
+                            throw error
+                        }
+                )
+        )
+    }
+
+    private fun fetchWeatherFromCurrLocation(latitude: Double,longitude : Double){
+        RequestManager.put(
+                MappingRequest(
+                        buildWeatherFromCurrLocationQueryString(latitude,longitude),
                         { WeatherInfo().fromJsonObject(it) },
                         { restoreViewState(it) },
                         { error ->
