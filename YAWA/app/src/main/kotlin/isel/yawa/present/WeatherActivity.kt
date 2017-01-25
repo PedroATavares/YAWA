@@ -43,7 +43,7 @@ class WeatherActivity : AppCompatActivity() {
             restoreViewState(savedInstanceState.getParcelable(WEATHER_KEY))
             return
         }
-        val longitude = intent.extras.getDouble("longitude")
+
         if(intent.extras.containsKey("latitude") && intent.extras.containsKey("longitude")){
             fetchWeatherFromCurrLocation(intent.extras.getDouble("latitude"),intent.extras.getDouble("longitude"))
         }else {

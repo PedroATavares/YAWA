@@ -16,6 +16,7 @@
     <string name="local">Get weather for current position</string>
     <string name="pos_not_found">Could not find position provider!</string>
     <string name="permission_not_granted">Cannot track device position without user permission!</string>
+    <string name="no_last_pos">Could not found last Position!</string>
     <string name="provide_text">Please provide a city name!</string>
 
 
@@ -64,6 +65,8 @@
     <string name="notifications_off">Notifications OFF</string>
     <string name="favourite_city_txt">Favorite City:</string>
     <string name="set_favourite">Set Favourite</string>
+    <string name="settings_popup_confirm">Do you want to remove entry?</string>
+    <string name="settings_popup_title">Remove entry</string>
 
 
 

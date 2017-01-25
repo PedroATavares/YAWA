@@ -20,7 +20,6 @@ import android.support.v4.app.ActivityCompat.shouldShowRequestPermissionRational
 import android.support.v4.app.ActivityCompat
 
 
-
 class MainActivity : AppCompatActivity() {
 
     val LOCATION_REQUEST_CODE =1
@@ -52,20 +51,33 @@ class MainActivity : AppCompatActivity() {
             }else {
                 val locManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-                val prov = locManager.getProviders(true)
+                var lat:Double;
+                var long:Double;
+                if(locManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                {
+                    val loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    if(loc!=null) {
+                        lat = loc.latitude
+                        long = loc.longitude
 
-                if (prov.size != 0) {
-                    val loc = locManager.getLastKnownLocation(prov[0])
+                        startWeatherActivity(lat, long)
+                    }else{
+                        makeToast( resources.getString(R.string.no_last_pos))
+                    }
+                }else{
+                    if(locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                        val loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                        if(loc!=null) {
+                            lat = loc.latitude
+                            long = loc.longitude
 
-                    val lat = loc.latitude
-                    val long = loc.longitude
-
-                    startActivity(Intent(this, WeatherActivity::class.java).apply {
-                        putExtra("latitude", lat)
-                        putExtra("longitude", long)
-                    })
-                } else {
-                    makeToast( resources.getString(R.string.pos_not_found))
+                            startWeatherActivity(lat, long)
+                        }else{
+                            makeToast( resources.getString(R.string.no_last_pos))
+                        }
+                    }else{
+                        makeToast( resources.getString(R.string.pos_not_found))
+                    }
                 }
             }
         }
@@ -138,10 +150,7 @@ class MainActivity : AppCompatActivity() {
                         val lat = loc.latitude
                         val long = loc.longitude
 
-                        startActivity(Intent(this, WeatherActivity::class.java).apply {
-                            putExtra("latitude", lat)
-                            putExtra("longitude", long)
-                        })
+                        startWeatherActivity(lat, long)
                     } else {
                         makeToast(resources.getString(R.string.pos_not_found))
                     }
@@ -153,5 +162,12 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
+    }
+
+    private fun startWeatherActivity(lat: Double, long: Double) {
+        startActivity(Intent(this, WeatherActivity::class.java).apply {
+            putExtra("latitude", lat)
+            putExtra("longitude", long)
+        })
     }
 }

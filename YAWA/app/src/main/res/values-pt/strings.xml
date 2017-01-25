@@ -41,4 +41,5 @@
     <string name="pos_not_found">Não foi possivel encontrar um método de localização!</string>
     <string name="permission_not_granted">Não é possivel saber a possição do dispositivo sem a permição do utilizador!</string>
     <string name="provide_text">Forneça o nome de uma cidade!</string>
+    <string name="no_last_pos">Não foi possivel encontrar a sua ultima posição!</string>
 </resources>

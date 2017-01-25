@@ -47,6 +47,8 @@ class OtherSettingsActivity : AppCompatActivity() {
         listItems = ArrayList<String>(sharedPref.getStringSet(SHARED_PREFERENCES_CITIES, HashSet<String>()))
         if(sharedPref.contains(resources.getString(R.string.time_notify_hour))){
             notif_toggle.isChecked=true
+            val time= "" + sharedPref.getInt(resources.getString(R.string.time_notify_hour),0) + ":" + sharedPref.getInt(resources.getString(R.string.time_notify_minute),0)
+            time_notify.setText(time)
         }
 
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems)
